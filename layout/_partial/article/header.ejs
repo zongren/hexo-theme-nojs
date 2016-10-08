@@ -19,19 +19,17 @@ if(item.link){
     link = item.path;
   }
 %>
-<div class="header">
-  <span class="title">
+<div class="article-header">
     <% if (index){ %>
-    <a href="<%- url_for(link) %>" <% if(item.link){ %>target="_blank"<% } %>><%= title %></a>
+    <a class="article-title" href="<%- url_for(link) %>" <% if(item.link){ %>target="_blank"<% } %>><%= title %></a>
     <% } else { %>
-    <%= title %>
+    <span class="article-title">
+      <%= title %>
+    </span>
     <% } %>
-  </span>
-  <span class="date">
     <% if(is_archive() && (typeof page.year != 'undefined' && typeof page.month != 'undefined' && (page.year + page.month) != date(item.date, 'YYYYM'))){ %>
-    <%= date(item.date, 'YYYY/MM/DD') %>
+    <span class="article-date icon-time"><%= date(item.date, 'YYYY/MM/DD') %></span>
     <% }else{ %>
-    <a href="<%= url_for('archives/'+date(item.date, 'YYYY/MM/')) %>"><%= date(item.date, 'YYYY/MM/DD') %></a>
+    <a class="article-date icon-time" href="<%= url_for('archives/'+date(item.date, 'YYYY/MM/')) %>"><%= date(item.date, 'YYYY/MM/DD') %></a>
     <% } %>
-  </span>
 </div>

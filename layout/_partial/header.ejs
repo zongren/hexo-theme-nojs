@@ -1,26 +1,14 @@
-<div class="header">
-  <div class="title">
-    <a href="<%- url_for() %>"><%= config.title %></a>
-  </div>
-  <% if(theme.date){ %>
-  <a href="<%- url_for('date') %>"><%= __('date') %></a>
-  <% } %>
-  <% if(theme.archive){ %>
-  <a href="<%- url_for('archives') %>"><%= __('archive') %></a>
-  <% } %>
-  <% if(theme.tags){ %>
-  <a href="<%- url_for('tags') %>"><%= __('tag') %></a>
-  <% } %>
-  <% if(theme.categories){ %>
-  <a href="<%- url_for('categories') %>"><%= __('category') %></a>
-  <% } %>
-  <% if(theme.github){ %>
-  <a href="https://github.com/<%- theme.github %>" target="_blank"><%= __('github') %></a>
-  <% } %>
-  <% if(theme.email){ %>
-  <a href="mailto:<%- theme.email %>"><%= __('email') %></a>
-  <% } %>
-  <% if(theme.tapir_token || theme.algolia){ %>
-  <a href="/search"><%- __('search') %></a>
-  <% } %>
-</div>
+<header>
+  <img src="<%- url_for('images/logo.jpg') %>" title="logo" />
+  <span><%= config.title %></span>
+  <nav>
+    <ul>
+      <% for(var x in theme.menu){ 
+        var item = theme.menu[x];
+        var url = item.url;
+        var title = item.title;
+        var icon = item.icon;
+      %><li><a href="<%- url_for(url) %>" title="<%= __(title) %>" class="navigation icon-<%= icon %>"></a></li><% } %>
+    </ul>
+  </nav>
+</header>

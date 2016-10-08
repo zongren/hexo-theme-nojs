@@ -1,9 +1,11 @@
 <% 
 var items = site.categories.sort('name');
 %>
-<div class="categories">
-  <span><%= _p('categoryCount',items.length) %></span>
+<section class="content-item archive categories">
+  <h3><%= _p('categoryCount',items.length) %></h3>
+  <ul class="archive-list">
   <% items.each(function(item){ %>
-  <div><a href="<%= url_for(item.path) %>"><%= item.name %>(<%= item.posts.length %>)</a></div>
+  <li class="archive-list-item"><a href="<%= url_for(item.path) %>"><%= item.name %>(<%= item.posts.length %>)</a></li>
   <% }); %>
-</div>
+  </ul>
+</section>

@@ -4,7 +4,7 @@
     categories.push('<a href="' + url_for(category.path) + '">' + category.name + '</a>');
   });
 %>
-<div class="category">
-  <%= __('category') %>:&nbsp;<%- categories.join(', ') %>
-</div>
+<span class="category icon-category">
+  <%- categories.join('') %>
+</span>
 <% } %>

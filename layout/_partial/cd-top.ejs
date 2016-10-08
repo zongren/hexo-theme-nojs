@@ -1,6 +1,10 @@
 <% if(is_home() || is_post()){ %>
-<div id="cd-top">
-    <a class="to-top" href="#">&#8593;</a>
-    <a class="to-bottom" href="<% if(is_post() && (theme.algolia || theme.duoshuo || theme.staticman)){ %>#comment<% }else{ %>#footer<% } %>">&#8595;</a>
+<div class="cd-top">
+    <a class="to-top icon-up" href="#" title="<%- __('toTop') %>"></a>
+    <% if(is_post() && theme.staticman){ %>
+    <a class="to-bottom icon-down" href="#comment" title="<%- __('toComment') %>" ></a>
+    <% }else{ %>
+    <a class="to-bottom icon-down" href="#footer" title="<%- __('toBottom') %>" ></a>
+    <% } %>
 </div>
 <% } %>

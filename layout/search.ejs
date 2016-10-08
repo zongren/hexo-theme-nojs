@@ -1,25 +1,19 @@
-<div class="search">
-  <form name="searchForm" id="search-form" action="javascript:void(0);" onsubmit="return submitSearchForm()">
-    <input type="text" name="query" placeholder="<%- __('placeholderSearch') %>" />
-    <input type="submit" value="<%- __('search') %>" />
-  </form>
-  <div>Powered by
-    <% if(theme.algolia){ %>
-    <a href="https://www.algolia.com/"  target="_blank"/>Algolia</a>
-    <% }else{ %>
-    <a href="https://www.tapirgo.com/" target="_blank">Tapir</a>
-    <% } %>
+<section class="content-item archive search">
+  <div class="search-form-wrapper">
+    <form class="search-form" name="searchForm" id="search-form" action="javascript:void(0);" onsubmit="return submitSearchForm()">
+    <span><input type="search" name="query" placeholder="<%- __('placeholderSearch') %>"/></span><button class="icon-search"></button>
+    </form>
   </div>
-  <div id="search-result">
+  <div id="searchResult" class="article-list">
   </div>
-</div>
+</section>
 <% if(theme.algolia){ %>
-<div id="pagination" style="display:none">
+<div id="pagination" class="pagination" style="display:none">
     <span class="left">
-        <a href="JavaScript:void(0)" id="previousPage" onclick="return previous();"><%= __('previousPage') %></a>
+        <a class="icon-previous" href="JavaScript:void(0)" id="previousPage" onclick="return previous();" title="<%= __('previousPage') %>"></a>
     </span>
     <span class="right">
-        <a href="JavaScript:void(0)" id="nextPage" onclick="return next();"><%= __('nextPage') %></a>
+        <a class="icon-next" href="JavaScript:void(0)" id="nextPage" onclick="return next();" title="<%= __('nextPage') %>"></a>
     </span>
 </div>
 <% } %>
@@ -302,7 +296,7 @@ var D= new Date('2011-06-02T09:34:29+02:00');
       }
   }
 var baseUrl = window.location.protocol+"//"+window.location.host+"/";
-var container = document.getElementById("search-result")
+var container = document.getElementById("searchResult")
 var countTemplate = "<%= _p('count',-1) %>";
 var xmlHttpRequest;
 if (window.XMLHttpRequest) {
@@ -315,6 +309,7 @@ if (window.XMLHttpRequest) {
 
 function createLink(title,link,dateString){
     var titleLinkNode = document.createElement('a');
+    titleLinkNode.className = 'article-title';
     titleLinkNode.href = link;
     titleLinkNode.innerHTML = title;
 
@@ -330,32 +325,24 @@ function createLink(title,link,dateString){
         day = '0' + day;
     }
     dateLinkNode.innerHTML = year + '-' + month + '-' + day;
+    dateLinkNode.className = 'icon-time article-date';
     dateLinkNode.href = baseUrl + 'archives/' + year + '/' + month;
 
-    var titleNode = document.createElement('span');
-    titleNode.className = 'title';
-    titleNode.appendChild(titleLinkNode);
-
-    var dateNode = document.createElement('span');
-    dateNode.className = 'date';
-    dateNode.appendChild(dateLinkNode);
-    
     var articleNode = document.createElement('div');
-    articleNode.className = "header";
-    articleNode.appendChild(titleNode);
-    articleNode.appendChild(dateNode);
+    articleNode.className = 'article-header';
+    articleNode.appendChild(titleLinkNode);
+    articleNode.appendChild(dateLinkNode);
     return articleNode;
 }
 
 function createCount(count){
-    var title = document.createElement('span');
-    title.className = 'light';
+    var title = document.createElement('h3');
     title.innerHTML = countTemplate.replace('-1',count);
     return title;
 }
 
 function createEmpty(){
-    var titleNode = document.createElement('div');
+    var titleNode = document.createElement('h3');
     titleNode.innerHTML = "<%- __('alertEmptyInput') %>";
     titleNode.className = 'empty';
     return titleNode;

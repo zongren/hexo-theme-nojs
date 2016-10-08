@@ -1,0 +1,18 @@
+<% if (index){ %>
+  <% if (item.excerpt){ %>
+  <div class="article-footer">
+    <span class="article-excerpt">
+      <a href="<%- url_for(item.path) %>#more" class="more-link">
+        <%= __('excerpt') %>
+      </a>
+    </span>
+  </div>
+  <% } %>
+<% }else{ %>
+  <% if ((item.tags && item.tags.length) || (item.categories && item.categories.length)){ %>
+  <div class="article-footer">
+    <%- partial('category') %>
+    <%- partial('tag') %>
+  </div>
+  <% } %>
+<% } %>

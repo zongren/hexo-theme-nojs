@@ -4,7 +4,7 @@
     tags.push('<a href="' + url_for(tag.path) + '">' + tag.name + '</a>');
   });
 %>
-<div class="tag">
-  <%= __('tag') %>:&nbsp;<%- tags.join(', ') %>
-</div>
+<span class="tag icon-tag">
+  <%- tags.join('') %>
+</span>
 <% } %>

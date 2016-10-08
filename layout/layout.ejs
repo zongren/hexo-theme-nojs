@@ -1,30 +1,13 @@
-<%- partial('_partial/head') %>
-<body>
-  <div id="content">
-  <% if(page.layout === 'error'){ %>
-  <%- body %>
-  <% }else{ %>
-  <%- partial('_partial/header') %>
-    <%- body %>
-    <div class="push"></div>
-  </div>
-  <%- partial('_partial/footer') %>
-  <%- partial('_partial/cd-top') %>
-  <% if(theme.duoshuo){ %>
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"<%- theme.duoshuo %>"};
-  </script>
-  <script src="//static.duoshuo.com/embed.js"></script>
-  <% } %>
-  <% if(theme.disqus){ %>
-  <script type="text/javascript">
-    var disqus_config = function () {
-      this.page.url = "<%- config.url %><%- config.root %><%- page.path %>";
-      this.page.identifier = "<%- page.path %>";
-    };
-  </script>
-  <script src="//<%- theme.disqus %>.disqus.com/embed.js"></script>
-  <% } %>
-<% } %>
-</body>
+<!DOCTYPE HTML>
+<html lang="zh-CN">  
+  <%- partial('_partial/head') %>
+  <body>
+    <div class="content">
+      <%- partial('_partial/header') %>
+      <%- body %>
+      <div class="push"></div>
+    </div>
+    <%- partial('_partial/footer') %>
+    <%- partial('_partial/cd-top') %>
+  </body>
 </html>

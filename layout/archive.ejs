@@ -23,10 +23,12 @@ else if(is_category()){
   count = site.categories.findOne({'name':page.category}).posts.length;
 }
 %>
-<div class="archive">
-  <span><%= _p('count',count) %></span>
+<section class="content-item archive">
+  <h3><%= _p('count',count) %></h3>
+  <div class="article-list">
   <% page.posts.each(function(item){ %>
-  <%- partial('_partial/article/title',{item:item,index:true}) %>
+  <%- partial('_partial/article/header',{item:item,index:true}) %>
   <% }); %>
-</div>
+  </div>
+</section>
 <%- partial('_partial/pagination') %>

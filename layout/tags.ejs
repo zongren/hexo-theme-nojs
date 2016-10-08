@@ -3,8 +3,9 @@ var step = 2;
 var max = 10;
 var items = site.tags.sort('name');
 %>
-<div class="tags">
-  <span><%= _p('tagCount',items.length) %></span>
+<section class="content-item archive tags">
+  <h3><%= _p('tagCount',items.length) %></h3>
+  <ul class="tag-list">
   <% items.each(function(item){ 
     var length = item.posts.length;
     var level = Math.ceil(length / step);
@@ -12,6 +13,7 @@ var items = site.tags.sort('name');
       level = max;
     }
     %>
-  <a href="<%= url_for(item.path) %>" class="level-<%= level %>"><%= item.name %>(<%= item.posts.length %>)</a>
+  <li class="tag-list-item"><a href="<%= url_for(item.path) %>" class="level-<%= level %>"><%= item.name %>(<%= item.posts.length %>)</a></li>
   <% }); %>
-</div>
+  </ul>
+</section>

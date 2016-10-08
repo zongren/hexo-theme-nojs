@@ -1,12 +1,12 @@
-<div id="pagination">
+<div class="pagination">
   <% if (page.prev){ %>
   <span class="left<% if (!page.next){ %> all<% } %>">
-    <a href="<%- url_for(page.prev_link) %>"><%= __('previousPage') %></a>
+    <a class="icon-previous" href="<%- url_for(page.prev_link) %>" title="<%= __('previousPage') %>"></a>
   </span>
   <% } %>
   <% if (page.next){ %>
   <span class="right<% if (!page.prev){ %> all<% } %>">
-    <a href="<%- url_for(page.next_link) %>"><%= __('nextPage') %></a>
+    <a class="icon-next" href="<%- url_for(page.next_link) %>" title="<%= __('nextPage') %>"></a>
   </span>
   <% } %>
 </div>

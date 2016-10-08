@@ -1,16 +1,28 @@
-highlight_theme: atom-one-dark
-
-# date: true
-
-# archive: true
-
-# tags: true
-
-# categories: true
-
-# github: 
-
-# email: 
+menu:
+  - home: 
+    url: ''
+    title: 'homepage'
+    icon: 'home'
+  # - date: 
+  #   url: 'date'
+  #   title: 'date'
+  #   icon: 'date'
+  # - archive: 
+  #   url: 'archives'
+  #   title: 'archive'
+  #   icon: 'archive'
+  # - tag: 
+  #   url: 'tags'
+  #   title: 'tag'
+  #   icon: 'tag'
+  # - category: 
+  #   url: 'categories'
+  #   title: 'category'
+  #   icon: 'category'
+  # - search: 
+  #   url: 'search'
+  #   title: 'search'
+  #   icon: 'search'
 
 # algolia:
 #   appId: ""
@@ -19,8 +31,6 @@ highlight_theme: atom-one-dark
 
 # tapir_token: 
 
-# duoshuo: 
-
-# disqus: 
-
 # staticman: 
+
+# highlight_theme: 

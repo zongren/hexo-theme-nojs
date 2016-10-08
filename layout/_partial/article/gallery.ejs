@@ -1,0 +1,7 @@
+<% if (item.photos && item.photos.length){ %>
+<div class="gallery">
+  <% item.photos.forEach(function(photo){ %>
+  <img src="<%- url_for(photo) %>">
+  <% }); %>
+</div>
+<% } %>

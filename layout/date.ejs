@@ -1,0 +1,12 @@
+<% 
+var count = site.posts.length;
+var content = list_archives({show_count: true, type: "monthly",format:"YYYY/MM"});
+content = content.replace(/(<span class="archive-list-count">)(\d+)(<\/span>)/g,"$1($2)$3");
+%>
+<div id="date">
+  <span><%= _p('count',count) %></span>
+  <% if (site.posts.length){ %>
+  <%- content %>
+  <% } %>
+</div>
+<% console.log(); %>

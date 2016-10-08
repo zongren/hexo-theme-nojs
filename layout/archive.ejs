@@ -1,0 +1,32 @@
+<% 
+var count = 0;
+if(is_archive()){ 
+  var year = page.year;
+  var month = page.month;
+  if(typeof year == "undefined" || typeof month == "undefined"){
+    count = site.posts.length;
+  }
+  else{
+    site.posts.each(function(item){
+      var itemYear = date(item.date,'YYYY');
+      var itemMonth = date(item.date,'M');
+      if(itemYear == year && itemMonth == month){
+        count ++;
+      }
+    });
+  }
+}
+else if(is_tag()){
+  count = site.tags.findOne({'name':page.tag}).posts.length;
+}
+else if(is_category()){
+  count = site.categories.findOne({'name':page.category}).posts.length;
+}
+%>
+<div class="archive">
+  <span><%= _p('count',count) %></span>
+  <% page.posts.each(function(item){ %>
+  <%- partial('_partial/article/title',{item:item,index:true}) %>
+  <% }); %>
+</div>
+<%- partial('_partial/pagination') %>

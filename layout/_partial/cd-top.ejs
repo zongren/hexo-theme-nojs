@@ -1,0 +1,6 @@
+<% if(is_home() || is_post()){ %>
+<div id="cd-top">
+    <a class="to-top" href="#">&#8593;</a>
+    <a class="to-bottom" href="<% if(is_post() && (theme.algolia || theme.duoshuo || theme.staticman)){ %>#comment<% }else{ %>#footer<% } %>">&#8595;</a>
+</div>
+<% } %>

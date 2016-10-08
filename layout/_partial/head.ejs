@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <%
+  var title = [];
+  if (page.current > 1){
+    title.push(__('page', page.current));
+  }
+  if (page.title){
+    title.push(page.title);
+  }
+  if (page.category){
+    title.push(page.category);
+  }
+  if (page.tag){
+    title.push(page.tag);
+  }
+  if (page.archive){
+    title.push(__('archive'));
+    if (page.year){
+      var archiveDate = page.year;
+      if(page.month){
+        archiveDate += '-';
+        archiveDate += page.month;
+      }
+      title.push(archiveDate);
+    }
+  }
+  title.push(config.title);
+  %>
+  <title><%= title.join(' | ') %></title>
+  <% if (config.author){ %>
+  <meta name="author" content="<%= config.author %>"><% } %>
+  <% if (page.description){ %>
+  <meta name="description" content="<%= page.description %>">
+  <% } else if (config.description){ %>
+  <meta name="description" content="<%= config.description %>">
+  <% } else if (page.excerpt){ %>
+  <meta name="description" content="<%= strip_html(page.excerpt).replace(/^\s*/, '').replace(/\s*$/, '') %>">
+  <% } else if (page.content){ %>
+  <meta name="description" content="<%= strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150) %>">
+  <% } %>
+  <% if (page.tags || page.categories){ %>
+  <% 
+  var tags = [];
+  for(var i in page.tags.data){
+    tags.push(page.tags.data[i].name);
+  }
+  var categories = [];
+  for(var i in page.categories.data){
+    categories.push(page.categories.data[i].name);
+  }
+  var keywords = _.union(tags,categories);
+  %>
+  <% if (keywords && keywords.length > 0){ %>
+  <meta name="keywords" content="<%= keywords.join(',') %>">
+  <% } %>
+  <% } %>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <% if(page.layout === 'error'){ %>
+  <link rel="stylesheet" href="/css/error.css" media="screen" type="text/css">
+  <% }else{ %>
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <% } %>
+</head>

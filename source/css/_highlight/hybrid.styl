@@ -1,0 +1,102 @@
+/*
+
+vim-hybrid theme by w0ng (https://github.com/w0ng/vim-hybrid)
+
+*/
+
+/*background color*/
+pre {
+  display: block;
+  overflow-x: auto;
+  padding 10px content-padding;
+  background: #1d1f21;
+}
+
+/*selection color*/
+pre::selection,
+pre span::selection {
+  background: #373b41;
+}
+
+pre::-moz-selection,
+pre span::-moz-selection {
+  background: #373b41;
+}
+
+/*foreground color*/
+pre {
+  color: #c5c8c6;
+}
+
+/*color: fg_yellow*/
+pre .title,
+pre .name {
+  color: #f0c674;
+}
+
+/*color: fg_comment*/
+pre .comment,
+pre .meta,
+pre .meta pre .keyword {
+  color: #707880;
+}
+
+/*color: fg_red*/
+pre .number,
+pre .symbol,
+pre .literal,
+pre .deletion,
+pre .link {
+ color: #cc6666
+}
+
+/*color: fg_green*/
+pre .string,
+pre .doctag,
+pre .addition,
+pre .regexp,
+pre .selector-attr,
+pre .selector-pseudo {
+  color: #b5bd68;
+}
+
+/*color: fg_purple*/
+pre .attribute,
+pre .code,
+pre .selector-id {
+ color: #b294bb;
+}
+
+/*color: fg_blue*/
+pre .keyword,
+pre .selector-tag,
+pre .bullet,
+pre .tag {
+ color: #81a2be;
+}
+
+/*color: fg_aqua*/
+pre .subst,
+pre .variable,
+pre .template-tag,
+pre .template-variable {
+  color: #8abeb7;
+}
+
+/*color: fg_orange*/
+pre .type,
+pre .built_in,
+pre .builtin-name,
+pre .quote,
+pre .section,
+pre .selector-class {
+  color: #de935f;
+}
+
+pre .emphasis {
+  font-style: italic;
+}
+
+pre .strong {
+  font-weight: bold;
+}

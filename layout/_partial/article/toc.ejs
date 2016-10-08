@@ -1,0 +1,6 @@
+<% if(!index){
+var tableOfContent = toc(item.content,{"list_number":false})
+%>
+<% if(typeof tableOfContent != 'undefined' && tableOfContent.length > 0){ %>
+<%- tableOfContent %>
+<% }} %>

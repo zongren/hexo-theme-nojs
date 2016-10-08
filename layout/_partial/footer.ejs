@@ -1,0 +1,8 @@
+<div class="light" id="footer">
+  <% if (config.author){ %>
+  &copy;&nbsp;<%= new Date().getFullYear() %>&nbsp;<%= config.author %>
+  <% } else { %>
+  &copy;&nbsp;<%= new Date().getFullYear() %>&nbsp;<%= config.title %>
+  <% } %>
+  Powered&nbsp;by&nbsp;<a href="http://hexo.io" target="_blank">Hexo</a>&nbsp;&amp;&nbsp;Theme&nbsp;by&nbsp;<a href="https://github.com/zongren/hexo-theme-nojs" target="_blank">nojs</a>
+</div>

@@ -1,0 +1,121 @@
+<%
+var content = "";
+if (item.excerpt && index){
+  content = item.excerpt;
+}else{
+  content = item.content;
+}
+content = content.replace(/<figure/g,"<div");
+content = content.replace(/<\/figure>/g,"</div>");
+%>
+<div class="article">
+  <%- partial('article/title') %>
+  <% if(!index){ %>
+  <%- partial('article/toc') %>
+  <% } %>
+  <div class="content">
+  <% if (item.photos && item.photos.length){ %>
+  <%- partial('article/gallery') %>
+  <% } %>
+  <%- content %>
+  </div>
+  <% if (index){ %>
+  <% if (item.excerpt || (item.tags && item.tags.length) || (item.categories && item.categories.length)){ %>
+  <div class="footer">
+    <% if (item.excerpt){ %>
+    <a href="<%- url_for(item.path) %>#more" class="more-link">
+      <%= __('excerpt') %>
+    </a>
+    <% } %>
+    <%- partial('article/category') %>
+    <%- partial('article/tag') %>
+  </div>
+  <% } %>
+  <% }else{ %>
+  <% if ((item.tags && item.tags.length) || (item.categories && item.categories.length)){ %>
+  <div class="footer">
+    <%- partial('article/category') %>
+    <%- partial('article/tag') %>
+  </div>
+  <% } %>
+  <% } %>
+</div>
+<% if(theme.duoshuo && !index){ %>
+<div class="ds-thread" id="comment" data-thread-key="<%- item.path %>" data-title="<%- item.title %>" data-url="<%- config.url %><%- config.root %><%- item.path %>"></div>
+<% } %>
+<% if(theme.disqus && !index){ %>
+<div id="disqus_thread" id="comment"></div>
+<% } %>
+<% if(theme.staticman && !index){ %>
+<div class="staticman" id="comment">
+  <h3><%- __('articleComment') %></h3>
+  <form id="comment-form" name="commentForm" method="POST" action="https://api.staticman.net/v1/entry/<%- theme.staticman %>" onsubmit="return submitComment()">
+    <input type="hidden" name="options[redirect]" value="<%- config.url %><%- config.root %><%- item.path %>">
+    <input name="options[slug]" type="hidden" value="<%- item.slug %>">
+    <label for="comment-name"><%= __('labelName') %></label><input localizedName="<%= __('name') %>" id="comment-name" name="fields[name]" type="text" placeholder="<%- __('pleaseEnter') %><%- __('name') %>">
+    <br>
+    <label for="comment-email"><%= __('labelEmail') %></label><input localizedName="<%= __('email') %>" id="comment-email" name="fields[email]" type="email" placeholder="<%- __('pleaseEnter') %><%- __('email') %>">
+    <br>
+    <label for="comment-message"><%= __('labelComment') %></label><textarea localizedName="<%= __('comment') %>" id="comment-message" name="fields[message]" placeholder="<%- __('pleaseEnter') %><%- __('comment') %>"></textarea>
+    <br>
+    <input type="submit" value="<%= __('submit') %>" /><span class="powered-by">Powered&nbsp;by&nbsp;<a href="https://staticman.net/" target="_blank">staticman</a>&nbsp;&#124;&nbsp;<%= __('commentHasDelay') %></span>
+  </form>
+  <% 
+  var commentArray = [];
+  var slug = item.slug;
+  for(i in site.data){
+    var nameArray = i.split('/');
+    var postName = nameArray[0];
+    if(postName == slug){
+      commentArray.push(site.data[i]);
+    }
+  }
+ %>
+ <% if(commentArray.length > 0){ %>
+ <% for(var i in commentArray){
+   var comment = commentArray[i];
+   var commentDate = new Date(comment.date);
+   comment.date = date(commentDate,'YYYY/MM/DD');
+  %>
+  <div class="comment">
+    <div class="comment-content">
+      <%- comment.message %>
+    </div>
+    <div class="comment-field">
+      <span class="comment-label"><%- __('labelName') %></span>
+      <span class="comment-value"><%- comment.name %></span>
+    </div>
+    <div class="comment-field">
+      <span class="comment-label"><%- __('labelCommentDate') %></span>
+      <span class="comment-value"><%- comment.date %></span>
+    </div>
+  </div>
+ <% } %>
+ <% }else{ %>
+ <div class="comment-empty light"><%= __('emptyComment') %></div>
+ <% } %>
+</div>
+<script>
+var pleaseEnter = "<%= __('pleaseEnter') %>";
+
+function submitComment(){
+  for(var i in commentForm.elements){
+    var element = commentForm.elements[i];
+    console.log(element); 
+    var value = element.value;
+    if(typeof value === 'undefined'){
+      value = '';
+    }
+    else{
+      value = value.trim();
+    }
+    if(value == ''){
+      element.focus();
+      return false;
+    } 
+  }
+  return true;
+}
+</script>
+
+<% } %>

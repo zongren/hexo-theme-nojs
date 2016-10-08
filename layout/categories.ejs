@@ -1,0 +1,9 @@
+<% 
+var items = site.categories.sort('name');
+%>
+<div class="categories">
+  <span><%= _p('categoryCount',items.length) %></span>
+  <% items.each(function(item){ %>
+  <div><a href="<%= url_for(item.path) %>"><%= item.name %>(<%= item.posts.length %>)</a></div>
+  <% }); %>
+</div>

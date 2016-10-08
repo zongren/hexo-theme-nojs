@@ -1,0 +1,17 @@
+<% 
+var step = 2;
+var max = 10;
+var items = site.tags.sort('name');
+%>
+<div class="tags">
+  <span><%= _p('tagCount',items.length) %></span>
+  <% items.each(function(item){ 
+    var length = item.posts.length;
+    var level = Math.ceil(length / step);
+    if(level > max){
+      level = max;
+    }
+    %>
+  <a href="<%= url_for(item.path) %>" class="level-<%= level %>"><%= item.name %>(<%= item.posts.length %>)</a>
+  <% }); %>
+</div>

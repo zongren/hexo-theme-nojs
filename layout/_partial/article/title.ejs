@@ -1,0 +1,37 @@
+<%
+var title;
+var link;
+if(item.title){
+  title = item.title;
+}
+else{
+  if(item.link){
+    title = item.link;
+  }
+  else{
+    title = item.path;
+  }
+}
+if(item.link){
+    link = item.link
+  }
+  else{
+    link = item.path;
+  }
+%>
+<div class="header">
+  <span class="title">
+    <% if (index){ %>
+    <a href="<%- url_for(link) %>" <% if(item.link){ %>target="_blank"<% } %>><%= title %></a>
+    <% } else { %>
+    <%= title %>
+    <% } %>
+  </span>
+  <span class="date">
+    <% if(is_archive() && (typeof page.year != 'undefined' && typeof page.month != 'undefined' && (page.year + page.month) != date(item.date, 'YYYYM'))){ %>
+    <%= date(item.date, 'YYYY/MM/DD') %>
+    <% }else{ %>
+    <a href="<%= url_for('archives/'+date(item.date, 'YYYY/MM/')) %>"><%= date(item.date, 'YYYY/MM/DD') %></a>
+    <% } %>
+  </span>
+</div>

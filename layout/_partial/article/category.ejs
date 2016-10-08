@@ -1,0 +1,10 @@
+<% if (item.categories && item.categories.length){ 
+  var categories = [];
+  item.categories.forEach(function(category){
+    categories.push('<a href="' + url_for(category.path) + '">' + category.name + '</a>');
+  });
+%>
+<div class="category">
+  <%= __('category') %>:&nbsp;<%- categories.join(', ') %>
+</div>
+<% } %>

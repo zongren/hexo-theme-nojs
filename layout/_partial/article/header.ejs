@@ -21,7 +21,7 @@ if(item.link){
 %>
 <div class="article-header">
     <% if (index){ %>
-    <a class="article-title" href="<%- url_for(link) %>" <% if(item.link){ %>target="_blank"<% } %>><%= title %></a>
+    <a class="article-title" title="<%= item.title %>" href="<%- url_for(link) %>" <% if(item.link){ %>target="_blank"<% } %>><%= title %></a>
     <% } else { %>
     <span class="article-title">
       <%= title %>
@@ -30,6 +30,6 @@ if(item.link){
     <% if(is_archive() && (typeof page.year != 'undefined' && typeof page.month != 'undefined' && (page.year + page.month) != date(item.date, 'YYYYM'))){ %>
     <span class="article-date icon-time"><%= date(item.date, 'YYYY/MM/DD') %></span>
     <% }else{ %>
-    <a class="article-date icon-time" href="<%= url_for('archives/'+date(item.date, 'YYYY/MM/')) %>"><%= date(item.date, 'YYYY/MM/DD') %></a>
+    <a class="article-date icon-time" title="<%= _p('postOfDate',date(item.date, 'YYYY/MM/DD')) %>" href="<%= url_for('archives/'+date(item.date, 'YYYY/MM/')) %>"><%= date(item.date, 'YYYY/MM/DD') %></a>
     <% } %>
 </div>

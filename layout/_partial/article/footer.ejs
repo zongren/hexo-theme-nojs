@@ -1,11 +1,25 @@
 <% if (index){ %>
-  <% if (item.excerpt){ %>
+  <% if (item.excerpt || theme.staticman){ %>
   <div class="article-footer">
-    <span class="article-excerpt">
-      <a href="<%- url_for(item.path) %>#more" class="more-link">
-        <%= __('excerpt') %>
+    <% if (item.excerpt){ %>
+      <a href="<%- url_for(item.path) %>#more" class="more-link<% if (theme.staticman){ %> half<% } %>" title="<%= __('excerpt') %>">
+        <i class="icon-more"></i>
+      </a><% } %><% if (theme.staticman){ %><% 
+  var commentArray = [];
+  var slug = item.slug;
+  for(i in site.data){
+    var nameArray = i.split('/');
+    var postName = nameArray[0];
+    if(postName == slug){
+      commentArray.push(site.data[i]);
+    }
+  }
+  var comment = commentArray.length;
+ %><a href="<%- url_for(item.path) %>#comment" class="comment-link<% if (item.excerpt){ %> half<% } %>" title="<%= __('comment') %>">
+        <i class="icon-comment"></i>
+        <%= comment %>
       </a>
-    </span>
+    <% } %>
   </div>
   <% } %>
 <% }else{ %>

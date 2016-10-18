@@ -12,7 +12,11 @@ body
 a
   color primary-color
   text-decoration none
-
+  transition-property color,background-color
+  transition-duration .3s
+  transition-timing-function ease-in-out
+  transition-delay 0s
+  
 ::selection 
   background primary-color
   color #fff
@@ -61,7 +65,7 @@ header
             color #fff
             background-color primary-color
 // footer
-footer
+body>footer
   height footer-height
   line-height footer-height
   position relative
@@ -136,50 +140,72 @@ footer
           padding 0
       pre
         margin 0
-    > table
-      table-layout fixed
-      width 100%
-      margin-top 5px
-      margin-bottom 5px
-      outline 0
-      border-collapse collapse
-      border-spacing 0
-      border-top-width 1px
-      border-top-style solid
-      border-top-color lighten(primary-color,50%)
-      border-left-width 1px
-      border-left-style solid
-      border-left-color lighten(primary-color,50%)
-      th
-        border-bottom-width 2px
-        border-bottom-style solid
-        border-bottom-color lighten(primary-color,30%)
-        border-right-width 1px
-        border-right-style solid
-        border-right-color lighten(primary-color,50%)
-        padding-top 5px
-        padding-left 5px
-        padding-bottom 5px
-        padding-right 5px
-        outline 0
-        text-align left
-      td
-        border-bottom-width 1px
-        border-bottom-style solid
-        border-bottom-color lighten(primary-color,50%)
-        border-right-width 1px
-        border-right-style solid
-        border-right-color lighten(primary-color,50%)
-        padding-top 5px
-        padding-left 5px
-        padding-bottom 5px
-        padding-right 5px
-        outline 0
   article      
     .article-content
+      .video-container
+        position relative
+        padding-top 56.25%
+        height 0
+        overflow hidden
+        iframe 
+          position absolute
+          top 0
+          left 0
+          width 100%
+          height 100%
+          margin-top 0
+      img
+        max-width 100%
+        margin-left auto
+        margin-right auto
+        display block
+        margin-top content-padding
       line-height 2
+      > table
+        table-layout fixed
+        width 100%
+        margin-top 5px
+        margin-bottom 5px
+        outline 0
+        border-collapse collapse
+        border-spacing 0
+        border-top-width 1px
+        border-top-style solid
+        border-top-color primary-color
+        border-left-width 1px
+        border-left-style solid
+        border-left-color primary-color
+        th
+          border-bottom-width 10px
+          border-bottom-style solid
+          border-bottom-color primary-color
+          border-right-width 1px
+          border-right-style solid
+          border-right-color primary-color
+          padding-top 5px
+          padding-left 5px
+          padding-bottom 5px
+          padding-right 5px
+          outline 0
+          text-align left
+          background-color lighten(primary-color,50%)
+          color text-color
+        td
+          border-bottom-width 1px
+          border-bottom-style solid
+          border-bottom-color primary-color
+          border-right-width 1px
+          border-right-style solid
+          border-right-color primary-color
+          padding-top 5px
+          padding-left 5px
+          padding-bottom 5px
+          padding-right 5px
+          outline 0
+        
     figure
       line-height 1.5
+      
     .toc
       color primary-color
       a
@@ -197,17 +223,31 @@ footer
           position absolute
           width 100%
           height 2px
-          bottom -2px
+          bottom -4px
           left 0
           background-color primary-color
           visibility hidden
           transform scaleX(0)
           transform-origin 0
-          transition all 0.3s ease-in-out 0s
+          transition all .3s ease-in-out 0s
         &:hover:before
           visibility visible
           transform scaleX(1)
-          
+    blockquote
+      padding 0 20px
+      position relative
+      border-left 5px solid primary-color
+      margin-top 10px
+      margin-bottom 10px
+      margin-left - content-padding
+      margin-right - content-padding
+      cite
+        &:before
+          content "—"
+          padding 0px 0.3em
+      a
+        &:hover
+          background-color #fff      
     .article-footer
       overflow-wrap normal
       white-space nowrap
@@ -220,8 +260,6 @@ footer
       margin-right - content-padding
       margin-bottom - content-padding
       margin-top content-padding
-      span 
-        line-height header-height
       .category
         padding-left content-padding
       .tag
@@ -233,11 +271,16 @@ footer
         padding-left 5px
         padding-right 5px
         color primary-color
+      a.more-link,
+      a.comment-link
         &:hover
           color #fff
-          background-color primary-color
       .icon-category,
       .icon-tag
+        a
+          &:hover
+            color #fff
+            background-color primary-color
         &:before
           display inline-block
           line-height header-height
@@ -246,7 +289,17 @@ footer
         width 100%
         text-align center
         padding 0
-
+        &.half
+          width 50%
+      .comment-link
+        vertical-align middle
+        width 100%
+        text-align center
+        padding 0
+        i
+          font-size 90%
+        &.half
+          width 50%
   .article-header
     height header-height
     line-height header-height
@@ -278,12 +331,10 @@ footer
     font-size 80%
     position absolute
     right 0
-  a.article-date,
-  a.article-title
-    color primary-color
+  a.article-date
     &:hover
-      color #fff
       background-color primary-color
+      color #fff
   .pagination
     width 100%
     height pagination-height
@@ -309,10 +360,52 @@ footer
       position absolute
       right 0
     .all
-      width 100%
+      width 100%    
+.staticman button,
+a.archive-list-link,
+a.more-link,
+a.comment-link
+  position relative
+
+.staticman button,
+a.article-title,
+a.archive-list-link,
+a.more-link,
+a.comment-link
+  color primary-color
+  z-index 1
+  &:hover
+    color #fff
+  &:before
+    content ""
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
+    background-color primary-color
+    visibility hidden
+    transform scaleX(0)
+    transform-origin 0
+    transition all .3s ease-in-out 0s
+    margin-right - content-padding
+    z-index -1
+  &:hover:before
+    visibility visible
+    transform scaleX(1)
 code
   font-family font-default
   color code-color
+.content article .article-content figcaption
+  margin-top -10px
+  margin-left -20px
+  margin-right -20px
+  padding-left 20px
+  padding-right 20px
+  padding-top 10px
+  padding-bottom 10px
+  color #eee
+  position relative
 // staticman
 .staticman
   .comment-empty
@@ -346,13 +439,17 @@ code
     min-height 80px
   form button
     outline 0
-    background-color primary-color
+    background-color background-color
     width 100%
     border 0
     padding 15px
-    color #fff
+    color #222
     font-size 14px
     cursor pointer
+    transition-property color,background-color
+    transition-duration .3s
+    transition-timing-function ease-in-out 
+    transition-delay 0s
 // comment list
   .comments-list
     padding-left 0
@@ -403,10 +500,10 @@ div.search-form-wrapper
       line-height 40px
       color #fff
       font-size 14px
-      transition all 0.3s ease
       cursor pointer
       width 40px
       box-sizing border-box
+      transition all .3s ease-in-out 0s
       &:hover
         color primary-color
         background-color background-color
@@ -414,33 +511,6 @@ div.search-form-wrapper
         display inline-block
         width 40px
         text-align center
-//
-min-font-size = 12px
-font-size-step = 1
-color-step = 6%
-$max-level = 10
-.tag-list
-  list-style-type none
-  padding 0
-  margin 0
-  .tag-list-item
-    display inline
-    
-  for $num in (1..$max-level)
-    a.level-{$num}
-      color lighten(primary-color,color-step * ($max-level - $num))
-      font-size min-font-size + font-size-step * $num
-  a
-    display inline-block
-    line-height 25px
-    height 25px
-    transition all .3s ease
-    padding-left 10px
-    padding-right 10px
-    &:hover
-      transform scale(1.5)
-      background-color primary-color
-      color #fff
 section.content-item.archive.tags
   padding-bottom content-padding
 // miscellaneous
@@ -461,9 +531,6 @@ li.archive-list-item
     padding-left content-padding
     padding-right content-padding
     width 100%
-    &:hover
-      background-color primary-color
-      color #fff
 .archive
   .article-header
     margin-top 0
@@ -473,12 +540,25 @@ li.archive-list-item
   &:before
     margin-right 5px
     position relative
-    top 1.5px
-.tag
-  &:before
-    position relative
-    top 3px
-.category 
-  &:before
-    position relative
-    top 3px
+.katex-display
+  overflow-x auto
+  margin-left - content-padding !important
+  margin-right - content-padding !important
+  padding-left content-padding 
+  padding-right content-padding
+  padding-top 10px
+  padding-bottom 10px
+  background-color #232323
+  color white
+.error
+  h1
+    text-align center
+    line-height 200px
+.pullquote.left
+  float left
+  margin-right 0
+.pullquote.right
+  float right
+  margin-left 0
+  border-right 5px solid #e74c3c
+  border-left-width 0

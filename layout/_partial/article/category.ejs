@@ -1,7 +1,7 @@
 <% if (item.categories && item.categories.length){ 
   var categories = [];
   item.categories.forEach(function(category){
-    categories.push('<a href="' + url_for(category.path) + '">' + category.name + '</a>');
+    categories.push('<a href="' + url_for(category.path) + '" title="' + _p('postOfCategory',category.name) + '" >' + category.name + '</a>');
   });
 %>
 <span class="category icon-category">

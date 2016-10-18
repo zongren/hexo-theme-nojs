@@ -3,14 +3,14 @@ menu:
     url: ''
     title: 'homepage'
     icon: 'home'
+  - archive: 
+    url: 'archives'
+    title: 'archive'
+    icon: 'archive'
   # - date: 
   #   url: 'date'
   #   title: 'date'
   #   icon: 'date'
-  # - archive: 
-  #   url: 'archives'
-  #   title: 'archive'
-  #   icon: 'archive'
   # - tag: 
   #   url: 'tags'
   #   title: 'tag'
@@ -31,6 +31,6 @@ menu:
 
 # tapir_token: 
 
-# staticman: 
-
 # highlight_theme: 
+
+# staticman: 

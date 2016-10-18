@@ -1,4 +1,5 @@
-<% if(is_home() || is_post()){ %>
+<% if(is_home() || is_post() || (page.layout === 'tags' && site.tags.length > 15) || (page.layout === 'categories' && site.categories.length > 15)){ %>
+
 <div class="cd-top">
     <a class="to-top icon-up" href="#" title="<%- __('toTop') %>"></a>
     <% if(is_post() && theme.staticman){ %>

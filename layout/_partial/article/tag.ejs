@@ -1,7 +1,7 @@
 <% if (item.tags && item.tags.length){
   var tags = [];
   item.tags.forEach(function(tag){
-    tags.push('<a href="' + url_for(tag.path) + '">' + tag.name + '</a>');
+    tags.push('<a href="' + url_for(tag.path) + '" title="'+ _p('postOfTag',tag.name) +'" >' + tag.name + '</a>');
   });
 %>
 <span class="tag icon-tag">

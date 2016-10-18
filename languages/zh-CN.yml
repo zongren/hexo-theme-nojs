@@ -41,3 +41,6 @@ commentList: 评论列表
 toTop: 抵达顶部
 toBottom: 抵达底部
 toComment: 抵达评论
+postOfDate: 查看日期 %s 下的所有文章
+postOfCategory: 查看分类 %s 下的所有文章
+postOfTag: 查看标签 %s 下的所有文章

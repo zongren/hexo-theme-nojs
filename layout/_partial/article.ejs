@@ -21,6 +21,6 @@ if (item.excerpt && index){
     <%- partial('article/footer') %>
   </article>
 </section>
-<% if(theme.staticman && !index){ %>
+<% if(theme.staticman && !index && item.comments){ %>
 <%- partial('article/staticman') %>
 <% } %>

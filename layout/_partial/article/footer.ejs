@@ -1,10 +1,10 @@
 <% if (index){ %>
-  <% if (item.excerpt || theme.staticman){ %>
+  <% if (item.excerpt || (theme.staticman && item.comments)){ %>
   <div class="article-footer">
     <% if (item.excerpt){ %>
       <a href="<%- url_for(item.path) %>#more" class="more-link<% if (theme.staticman){ %> half<% } %>" title="<%= __('excerpt') %>">
         <i class="icon-more"></i>
-      </a><% } %><% if (theme.staticman){ %><% 
+      </a><% } %><% if (theme.staticman && item.comments){ %><% 
   var commentArray = [];
   var slug = item.slug;
   for(i in site.data){

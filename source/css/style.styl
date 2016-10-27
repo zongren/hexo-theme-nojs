@@ -6,6 +6,5 @@
 $highlight_theme = hexo-config('highlight_theme')
 unless $highlight_theme
   $highlight_theme = 'atom-one-light'
-$path = '_highlight/' + $highlight_theme 
-if $highlight_theme 
-  @import $path
+$highlight_path = '_highlight/' + $highlight_theme 
+@import $highlight_path

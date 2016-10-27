@@ -1,9 +1,9 @@
 <% if(is_home() || is_post() || (page.layout === 'tags' && site.tags.length > 15) || (page.layout === 'categories' && site.categories.length > 15)){ %>
 
-<div class="cd-top">
+<div class="elevator">
     <a class="to-top icon-up" href="#" title="<%- __('toTop') %>"></a>
-    <% if(is_post() && theme.staticman){ %>
-    <a class="to-bottom icon-down" href="#comment" title="<%- __('toComment') %>" ></a>
+    <% if(is_post() && theme.staticman && page.comments){ %>
+    <a class="to-bottom icon-comment" href="#comment" title="<%- __('toComment') %>" ></a>
     <% }else{ %>
     <a class="to-bottom icon-down" href="#footer" title="<%- __('toBottom') %>" ></a>
     <% } %>

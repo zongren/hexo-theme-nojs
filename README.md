@@ -42,9 +42,7 @@ menu
 ```
 
 ## Add search page 
-Search page requires [`Algolia`](https://www.algolia.com).Execute `hexo new page search` and set layout to `search`.
-### Use `algolia`
-Uncomment following code to `theme.config` file
+Search page requires [`Algolia`](https://www.algolia.com).Execute `hexo new page search` and set layout to `search`.Uncomment following code to `theme.config` file
 ```
 # algolia:
 #   appId: "{replace with your Application ID}"

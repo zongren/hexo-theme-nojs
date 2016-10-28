@@ -42,7 +42,7 @@ menu
 ```
 
 ## Add search page 
-Search page requires [`Algolia`](https://www.algolia.com) or [`Tapir`](https://www.tapirgo.com).Execute `hexo new page search` and set layout to `search`.
+Search page requires [`Algolia`](https://www.algolia.com).Execute `hexo new page search` and set layout to `search`.
 ### Use `algolia`
 Uncomment following code to `theme.config` file
 ```
@@ -51,18 +51,6 @@ Uncomment following code to `theme.config` file
 #   apiKey: "{replace with your Search-Only API Key}"
 #   indexName: "{replace with your index name}"
 ```
-### Use `tapir`
-Uncomment following code to `theme.config` file
-```
-# tapir_token: "{replace with your token}"
-```
 
-## Change highlight theme
-Edit `nojs/_config.yml`
-```
-highlight_theme: theme_name
-```
-theme_name can be found at `nojs/source/css/_highlight/`.
-
-## Enable Staticman
+## Enable comment
 NoJS supports staticman,first uncomment `# staticman:` in `theme config`.

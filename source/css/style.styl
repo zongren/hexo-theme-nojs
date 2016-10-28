@@ -3,8 +3,4 @@
 @import '_partial/icon'
 @import '_partial/normalize'
 @import '_partial/content'
-$highlight_theme = hexo-config('highlight_theme')
-unless $highlight_theme
-  $highlight_theme = 'atom-one-light'
-$highlight_path = '_highlight/' + $highlight_theme 
-@import $highlight_path
+@import '_partial/highlight'

@@ -1,6 +1,6 @@
 <header>
-  <img src="<%- url_for('images/logo.jpg') %>" title="logo" />
-  <span><%= config.title %></span>
+  <a class="header__title" href="<%= url_for() %>"><%= config.title %>
+  </a>
   <nav>
     <ul>
       <% for(var x in theme.menu){ 

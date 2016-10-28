@@ -347,7 +347,6 @@ function createEmpty(){
     titleNode.className = 'empty';
     return titleNode;
 }
-<% if(theme.algolia){ %>
 var url = window.location.protocol+"//<%- theme.algolia.appId %>-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=<%- theme.algolia.appId %>&x-algolia-api-key=<%- theme.algolia.apiKey %>";
 var pagination = document.getElementById('pagination');
 var previousPage = document.getElementById('previousPage');
@@ -437,63 +436,4 @@ function callback(resultJson){
         container.appendChild(link);
     }
 }
-
-<% }else{ %>
-var url = window.location.protocol+"//www.tapirgo.com/api/1/search.json";
-var token = "<%- theme.tapir_token %>";
-function ascii(string) {
-    var result = "";
-    for(i = 0; i < string.length; ++i){
-        if(string.charCodeAt(i) > 127)
-        {
-            var character = string.charCodeAt(i).toString();
-            character = parseInt(character,10).toString(16);
-            result += '\\u' + character;
-        }
-        else
-        {
-            result += string.charAt(i);
-        }
-    }
-    return result;
-}
-function submitSearchForm(){
-    var query = searchForm.query.value;
-    query = ascii(query);
-    if(query.length == 0){
-        container.innerHTML = "";
-        container.appendChild(createEmpty());
-        return false;
-    }
-    else{
-        xmlHttpRequest.open("GET",url+"?token="+token+"&query="+query,true);
-        xmlHttpRequest.send();
-        xmlHttpRequest.onreadystatechange=function()
-        {
-        if (xmlHttpRequest.readyState==4 && xmlHttpRequest.status==200)
-            {
-                var resultString = xmlHttpRequest.responseText;
-                if(typeof JSON === 'undefined'){
-                    resultJson = json_parse(resultString);
-                }
-                else{
-                    resultJson = JSON.parse(resultString);
-                }
-                callback(resultJson);
-            }
-        }
-    }
-    return false;
-}
-function callback(resultJson){
-    container.innerHTML = "";
-    var countNode = createCount(resultJson.length);
-    container.appendChild(countNode);
-    for(i in resultJson){
-        var post = resultJson[i];
-        var link = createLink(post.title,post.link,post.published_on);
-        container.appendChild(link);
-    }
-}
-<% } %>
 </script>

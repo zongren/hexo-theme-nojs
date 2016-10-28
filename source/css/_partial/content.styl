@@ -26,25 +26,21 @@ header
   height header-height
   line-height header-height
   position relative
-  padding-left header-height
-  span
-    padding-left 20px
-    padding-right 20px
+  .header__title
+    z-index 100
     overflow-wrap normal
     white-space nowrap
     overflow-x auto
-    right menu-width
-    position absolute
-    left header-height
-  img 
+    right 0
     position absolute
     left 0
-    height header-height
-    width header-height
+    text-align center
+    font-size 24px
   nav
     position absolute
     right 0
     top 0
+    z-index 1000
     ul
       padding-left 0
       margin 0
@@ -71,18 +67,21 @@ body>footer
   position relative
   font-size 12px
   padding-left 10px
+  margin-bottom 0
   span.copyright
     @media (max-width:320px)
-      position relative
-      display block
+      float left
+      margin-right 200px
+      margin-bottom 10px
   span.powered-by 
     text-align right
     position absolute
     right 0
     @media (max-width:320px)
+      float left
       position relative
       text-align left
-      width 100%
+      line-height 1
   a
     display inline-block
     line-height footer-height
@@ -92,7 +91,12 @@ body>footer
       background-color primary-color
       color #fff
       text-decoration none
-
+    @media (max-width:320px)
+      display inline
+      line-height 1
+      padding-left 0
+      padding-right 0
+      padding 2px
 // elevator
 .elevator
   width 100%
@@ -378,7 +382,8 @@ a.comment-link
 a.article-title,
 a.archive-list-link,
 a.more-link,
-a.comment-link
+a.comment-link,
+a.header__title
   color primary-color
   z-index 1
   &:hover
@@ -557,8 +562,8 @@ li.archive-list-item
   padding-right content-padding
   padding-top 10px
   padding-bottom 10px
-  background-color #232323
-  color white
+  background-color #fafafa
+  color #222
 .error
   h1
     text-align center

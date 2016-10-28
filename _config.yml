@@ -1,8 +1,4 @@
 menu:
-  - home: 
-    url: ''
-    title: 'homepage'
-    icon: 'home'
   - archive: 
     url: 'archives'
     title: 'archive'
@@ -28,9 +24,5 @@ menu:
 #   appId: ""
 #   apiKey: ""
 #   indexName: ""
-
-# tapir_token: 
-
-# highlight_theme: 
 
 # staticman: 

@@ -8,35 +8,15 @@ excerpt: 阅读全文
 count: 共 %d 篇文章
 tagCount: 共 %d 个标签
 categoryCount: 共 %d 个分类
-search: 搜索
 placeholderSearch: 请输入关键词
 alertEmptyInput: 请输入相关信息！
-weibo: 微博
-qzone: QQ空间
-qq: QQ
-wechat: 微信
-google: 谷歌
-twitter: 推特
-facebook: 脸书
-index: 首页
-about: 关于
-date: 日期 
-labelName: 姓名：
-labelEmail: 邮箱：
-labelComment: 评论：
-labelCommentDate: 评论日期：
 submit: 提交
 name: 姓名
 email: 邮箱
-github: GitHub
 comment: 评论
-pleaseEnter: 请输入
-commentHasDelay: 评论有延迟，请几分钟后查看
 emptyComment: 没有任何评论
 articleComment: 文章评论
 pageNotFound: 找不到该页面
-backToHomepage: 返回主页
-homepage: 主页
 commentList: 评论列表
 toTop: 抵达顶部
 toBottom: 抵达底部

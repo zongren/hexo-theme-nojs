@@ -9,11 +9,7 @@
     <span class="powered-by">
         Powered&nbsp;by&nbsp;<a href="http://hexo.io" target="_blank">Hexo</a>
         <% if(page.layout != 'undefined' && page.layout === 'search'){ %>
-        &nbsp;&amp;&nbsp;
-        <% if(theme.algolia){ %>
-        <a href="https://www.algolia.com/"  target="_blank"/>Algolia</a>
-        <% }else{ %>
-        <a href="https://www.tapirgo.com/" target="_blank">Tapir</a><% }} %>
+        &nbsp;&amp;&nbsp;<a href="https://www.algolia.com/"  target="_blank"/>Algolia</a><% } %>
         <% if(is_post() && page.comments && theme.staticman){ %>
         &amp;&nbsp;<a href="https://staticman.net/" target="_blank">Staticman</a>
         <% } %>

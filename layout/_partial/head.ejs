@@ -4,7 +4,7 @@
   <%
   var title = [];
   if (page.current > 1){
-    title.push(__('page', page.current));
+    title.push("第"+page.current+"页");
   }
   if (page.title){
     title.push(page.title);
@@ -16,7 +16,7 @@
     title.push(page.tag);
   }
   if (page.archive){
-    title.push(__('archive'));
+    title.push("归档");
     if (page.year){
       var archiveDate = page.year;
       if(page.month){

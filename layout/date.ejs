@@ -2,9 +2,11 @@
 var count = site.posts.length;
 var content = list_archives({show_count: true, type: "monthly",format:"YYYY/MM"});
 content = content.replace(/(<\/a>)(<span class="archive-list-count">)(\d+)(<\/span>)/g,"($3)$1");
+content = content.replace(/archive\-list/g,"content__list");
+content = content.replace(/archive\-list-item/g,"content__list-item");
+content = content.replace(/archive\-list-link/g,"content__list-link");
 %>
-<section class="content-item archive">
-  <h3><%= _p('count',count) %></h3>
+<section class="content__item">
   <% if (site.posts.length){ %>
   <%- content %>
   <% } %>

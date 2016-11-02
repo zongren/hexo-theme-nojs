@@ -1,8 +1,7 @@
 <section class="content__item">
   <div class="content__list">
-  <% page.posts.each(function(item){ %>
+  <% site.posts.each(function(item){ %>
   <%- partial('_partial/article-header',{item:item,index:true}) %>
   <% }); %>
   </div>
 </section>
-<%- partial('_partial/pagination') %>

@@ -1,36 +1,23 @@
 menu:
-  - home: 
-    url: ''
-    title: 'homepage'
-    icon: 'home'
-  - archive: 
-    url: 'archives'
-    title: 'archive'
-    icon: 'archive'
   # - date: 
   #   url: 'date'
-  #   title: 'date'
-  #   icon: 'date'
+  #   title: '日期'
+  # - archive: 
+  #   url: 'list'
+  #   title: '归档'
   # - tag: 
   #   url: 'tags'
-  #   title: 'tag'
-  #   icon: 'tag'
+  #   title: '标签'
   # - category: 
   #   url: 'categories'
-  #   title: 'category'
-  #   icon: 'category'
+  #   title: '分类'
   # - search: 
   #   url: 'search'
-  #   title: 'search'
-  #   icon: 'search'
+  #   title: '搜索'
 
 # algolia:
 #   appId: ""
 #   apiKey: ""
 #   indexName: ""
-
-# tapir_token: 
-
-# highlight_theme: 
 
 # staticman: 

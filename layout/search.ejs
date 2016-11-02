@@ -1,22 +1,18 @@
-<section class="content-item archive search">
-  <div class="search-form-wrapper">
-    <form class="search-form" name="searchForm" id="search-form" action="javascript:void(0);" onsubmit="return submitSearchForm()">
-    <span><input type="search" name="query" placeholder="<%- __('placeholderSearch') %>"/></span><button class="icon-search"></button>
-    </form>
-  </div>
-  <div id="searchResult" class="article-list">
-  </div>
+<section class="content__item">
+  <form class="search-form" name="searchForm" onsubmit="return submitSearchForm()">
+      <span class="search-form__span">
+          <input class="search-form__input" type="search" name="query" placeholder="请输入关键词"/>
+      </span>
+      <button class="search-form__button">搜索</button>
+  </form>
+  <div class="content__list" id="searchResult"></div>
 </section>
-<% if(theme.algolia){ %>
 <div id="pagination" class="pagination" style="display:none">
-    <span class="left">
-        <a class="icon-previous" href="JavaScript:void(0)" id="previousPage" onclick="return previous();" title="<%= __('previousPage') %>"></a>
-    </span>
-    <span class="right">
-        <a class="icon-next" href="JavaScript:void(0)" id="nextPage" onclick="return next();" title="<%= __('nextPage') %>"></a>
+    <span>
+      <a class="pagination__link" href="JavaScript:void(0)" id="previousPage" onclick="return previous();" title="prev">prev</a>
+      <a class="pagination__link" href="JavaScript:void(0)" id="nextPage" onclick="return next();" title="next">next</a>
     </span>
 </div>
-<% } %>
 <script>
 var json_parse = (function () {
     "use strict";
@@ -297,7 +293,6 @@ var D= new Date('2011-06-02T09:34:29+02:00');
   }
 var baseUrl = window.location.protocol+"//"+window.location.host+"/";
 var container = document.getElementById("searchResult")
-var countTemplate = "<%= _p('count',-1) %>";
 var xmlHttpRequest;
 if (window.XMLHttpRequest) {
     //Firefox, Opera, IE7, and other browsers will use the native object
@@ -309,45 +304,15 @@ if (window.XMLHttpRequest) {
 
 function createLink(title,link,dateString){
     var titleLinkNode = document.createElement('a');
-    titleLinkNode.className = 'article-title';
+    titleLinkNode.className = 'article-header__link';
     titleLinkNode.href = link;
     titleLinkNode.innerHTML = title;
-
-    var dateLinkNode = document.createElement('a');
-    var date = Date.fromISO(dateString);
-    var year = date.getFullYear();
-    var month = (date.getMonth()+1)+'';
-    if(month.length < 2){
-        month = '0' + month;
-    }
-    var day = date.getDate() + '';
-    if(day.length < 2){
-        day = '0' + day;
-    }
-    dateLinkNode.innerHTML = year + '-' + month + '-' + day;
-    dateLinkNode.className = 'icon-time article-date';
-    dateLinkNode.href = baseUrl + 'archives/' + year + '/' + month;
-
     var articleNode = document.createElement('div');
     articleNode.className = 'article-header';
     articleNode.appendChild(titleLinkNode);
-    articleNode.appendChild(dateLinkNode);
     return articleNode;
 }
 
-function createCount(count){
-    var title = document.createElement('h3');
-    title.innerHTML = countTemplate.replace('-1',count);
-    return title;
-}
-
-function createEmpty(){
-    var titleNode = document.createElement('h3');
-    titleNode.innerHTML = "<%- __('alertEmptyInput') %>";
-    titleNode.className = 'empty';
-    return titleNode;
-}
-<% if(theme.algolia){ %>
 var url = window.location.protocol+"//<%- theme.algolia.appId %>-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=<%- theme.algolia.appId %>&x-algolia-api-key=<%- theme.algolia.apiKey %>";
 var pagination = document.getElementById('pagination');
 var previousPage = document.getElementById('previousPage');
@@ -377,30 +342,23 @@ function search(){
     var query = searchForm.query.value;
     var params = "{\"requests\":[{\"indexName\":\"<%- theme.algolia.indexName %>\",\"params\":\"query="+query+"&hitsPerPage="+hitsPerPage+"&page="+page+"\"}]}";
 
-    if(query.length == 0){
-        container.innerHTML = "";
-        container.appendChild(createEmpty());
-        return false;
-    }
-    else{
-        xmlHttpRequest.open("POST",url,true);
-        xmlHttpRequest.onreadystatechange=function()
+    xmlHttpRequest.open("POST",url,true);
+    xmlHttpRequest.onreadystatechange=function()
+    {
+        if (xmlHttpRequest.readyState==4 && xmlHttpRequest.status==200)
         {
-            if (xmlHttpRequest.readyState==4 && xmlHttpRequest.status==200)
-            {
-                var resultString = xmlHttpRequest.responseText;
-                var resultJson;
-                if(typeof JSON === 'undefined'){
-                    resultJson = json_parse(resultString);
-                }
-                else{
-                    resultJson = JSON.parse(resultString);
-                }
-                callback(resultJson);
+            var resultString = xmlHttpRequest.responseText;
+            var resultJson;
+            if(typeof JSON === 'undefined'){
+                resultJson = json_parse(resultString);
             }
+            else{
+                resultJson = JSON.parse(resultString);
+            }
+            callback(resultJson);
         }
-        xmlHttpRequest.send(params);
     }
+    xmlHttpRequest.send(params);
 }
 
 function callback(resultJson){
@@ -429,71 +387,10 @@ function callback(resultJson){
     }
     
     container.innerHTML = "";
-    var countNode = createCount(nbHits);
-    container.appendChild(countNode);
     for(i in hits){
         var post = hits[i];
         var link = createLink(post.title,baseUrl + post.path,post.date);
         container.appendChild(link);
     }
 }
-
-<% }else{ %>
-var url = window.location.protocol+"//www.tapirgo.com/api/1/search.json";
-var token = "<%- theme.tapir_token %>";
-function ascii(string) {
-    var result = "";
-    for(i = 0; i < string.length; ++i){
-        if(string.charCodeAt(i) > 127)
-        {
-            var character = string.charCodeAt(i).toString();
-            character = parseInt(character,10).toString(16);
-            result += '\\u' + character;
-        }
-        else
-        {
-            result += string.charAt(i);
-        }
-    }
-    return result;
-}
-function submitSearchForm(){
-    var query = searchForm.query.value;
-    query = ascii(query);
-    if(query.length == 0){
-        container.innerHTML = "";
-        container.appendChild(createEmpty());
-        return false;
-    }
-    else{
-        xmlHttpRequest.open("GET",url+"?token="+token+"&query="+query,true);
-        xmlHttpRequest.send();
-        xmlHttpRequest.onreadystatechange=function()
-        {
-        if (xmlHttpRequest.readyState==4 && xmlHttpRequest.status==200)
-            {
-                var resultString = xmlHttpRequest.responseText;
-                if(typeof JSON === 'undefined'){
-                    resultJson = json_parse(resultString);
-                }
-                else{
-                    resultJson = JSON.parse(resultString);
-                }
-                callback(resultJson);
-            }
-        }
-    }
-    return false;
-}
-function callback(resultJson){
-    container.innerHTML = "";
-    var countNode = createCount(resultJson.length);
-    container.appendChild(countNode);
-    for(i in resultJson){
-        var post = resultJson[i];
-        var link = createLink(post.title,post.link,post.published_on);
-        container.appendChild(link);
-    }
-}
-<% } %>
 </script>

@@ -1,0 +1,24 @@
+<%
+var title;
+var link;
+if(item.title){
+  title = item.title;
+}
+else{
+  if(item.link){
+    title = item.link;
+  }
+  else{
+    title = item.path;
+  }
+}
+if(item.link){
+    link = item.link
+  }
+  else{
+    link = item.path;
+  }
+%>
+<div class="article-header">
+  <a class="article-header__link" title="<%= item.title %>" href="<%- url_for(link) %>" <% if(item.link){ %>target="_blank"<% } %>><%= title %></a>
+</div>

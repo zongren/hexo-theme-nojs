@@ -1,21 +1,33 @@
-<footer id="footer">
-    <span class="copyright icon-copyright">
-    <% if (config.author){ %>
-    <%= new Date().getFullYear() %>&nbsp;<%= config.author %>
-    <% } else { %>
-    <%= new Date().getFullYear() %>&nbsp;<%= config.title %>
-    <% } %>
-    <span class="powered-by">
-        Powered&nbsp;by&nbsp;<a href="http://hexo.io" target="_blank">Hexo</a>
-        <% if(page.layout != 'undefined' && page.layout === 'search'){ %>
-        &nbsp;&amp;&nbsp;
-        <% if(theme.algolia){ %>
-        <a href="https://www.algolia.com/"  target="_blank"/>Algolia</a>
-        <% }else{ %>
-        <a href="https://www.tapirgo.com/" target="_blank">Tapir</a><% }} %>
-        <% if(is_post() && page.comments && theme.staticman){ %>
-        &amp;&nbsp;<a href="https://staticman.net/" target="_blank">Staticman</a>
-        <% } %>
-        &amp;&nbsp;<a href="https://github.com/zongren/hexo-theme-nojs" target="_blank">nojs</a>
-    </span>
+<%
+var joinLinkArray = function(linkArray,titleArray,glue){
+    if(typeof linkArray === "undefined" || typeof titleArray === "undefined" || linkArray.length != titleArray.length){
+        return "";
+    }
+    if(typeof glue === "undefined"){
+        glue = "&nbsp;&amp;&nbsp;"
+    }
+    var array = [];
+    for(var i in linkArray){
+        var link = linkArray[i];
+        var title = titleArray[i];
+        array.push("<a class=\"footer__link\" href=\""+link+"\" title=\""+title+"\" target=\"_blank\">"+title+"</a>")
+    }
+    return array.join(glue);
+}
+var copyright = new Date().getFullYear() + "&nbsp;";
+if (config.author){
+    copyright += config.author;
+}else{
+    copyright += config.title;
+}
+var linkArray = [];
+linkArray.push("http://hexo.io");
+linkArray.push("https://github.com/zongren/hexo-theme-nojs");
+var titleArray = [];
+titleArray.push("Hexo");
+titleArray.push("nojs");
+%>
+<footer class="footer">
+    &copy;&nbsp;<%- copyright %>
+    Powered&nbsp;by&nbsp;<%- joinLinkArray(linkArray,titleArray) %>
 </footer>

@@ -1,14 +1,19 @@
-<header>
-  <img src="<%- url_for('images/logo.jpg') %>" title="logo" />
-  <span><%= config.title %></span>
-  <nav>
-    <ul>
-      <% for(var x in theme.menu){ 
-        var item = theme.menu[x];
-        var url = item.url;
-        var title = item.title;
-        var icon = item.icon;
-      %><li><a href="<%- url_for(url) %>" title="<%= __(title) %>" class="navigation icon-<%= icon %>"></a></li><% } %>
-    </ul>
-  </nav>
+<header class="header">
+  <div class="header__wrapper">
+    <a class="header__title header__link" href="<%= url_for() %>"><%= config.title %>
+    </a>
+    <nav class="header__menu">
+      <ul class="header__list">
+        <% for(var x in theme.menu){ 
+          var item = theme.menu[x];
+          var url = item.url;
+          var title = item.title;
+        %>
+        <li class="header__list-item">
+          <a class="header__link" href="<%- url_for(url) %>" title="<%= title %>"><%= title %></a>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
 </header>

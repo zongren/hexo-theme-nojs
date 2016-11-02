@@ -6,21 +6,97 @@ if (item.excerpt && index){
   content = item.content;
 }
 %>
-<section class="content-item">
-  <article>
-    <%- partial('article/header') %>
-    <% if(!index){ %>
-    <%- partial('article/toc') %>
+<section class="content__item">
+  <article class="article">
+    <% if(index){ %>
+    <%- partial('article-header') %>
     <% } %>
-    <div class="article-content">
+    <div class="article__content">
     <% if (item.photos && item.photos.length){ %>
-    <%- partial('article/gallery') %>
+    <div class="article__gallery">
+      <% item.photos.forEach(function(photo){ %>
+        <img class="article__gallery-image" alt="photo" src="<%- url_for(photo) %>">
+      <% }); %>
+    </div>
     <% } %>
     <%- content %>
     </div>
-    <%- partial('article/footer') %>
+    <% if(index){ %>
+      <% if (item.excerpt){ %>
+      <div class="article__excerpt">
+        <a class="article__excerpt-link" href="<%- url_for(item.path) %>#more" class="more-link" title="read more">more</a>
+      </div>
+      <% } %>
+    <% }else{ 
+      var linkArray = [];
+      if (item.categories && item.categories.length){ 
+        item.categories.forEach(function(category){
+          linkArray.push('<a class="article__category-link" href="' + url_for(category.path) + '" title="查看分类' + category.name + '下的文章" >' + category.name + '</a>');
+        });
+      }
+      if (item.tags && item.tags.length){
+        item.tags.forEach(function(tag){
+          linkArray.push('<a class="article__category-link" href="' + url_for(tag.path) + '" title="查看标签'+ tag.name +'下的文章" >' + tag.name + '</a>');
+        });
+      }
+      if(linkArray.length){
+    %>
+    <span class="article__category">
+      <%- linkArray.join('') %>
+    </span>
+    <% }} %>
   </article>
 </section>
-<% if(theme.staticman && !index){ %>
-<%- partial('article/staticman') %>
+<% if(theme.staticman && !index && item.comments){ %>
+<section class="content__item">
+  <form class="comment-form" method="POST" action="https://api.staticman.net/v1/entry/<%- theme.staticman %>">
+    <input type="hidden" name="options[redirect]" value="<%- config.url %><%- config.root %><%- item.path %>">
+    <input name="options[slug]" type="hidden" value="<%- item.slug %>">
+    <span class="comment-form__input-wrapper">
+      <input class="comment-form__input" name="fields[name]" type="text" placeholder="请输入姓名"/>
+    </span>
+    <span class="comment-form__input-wrapper">
+      <input class="comment-form__input" name="fields[email]" type="email" placeholder="请输入邮箱"/>
+    </span>
+    <span class="comment-form__label">不会公开邮箱</span>
+    <span class="comment-form__input-wrapper">
+    <textarea class="comment-form__input comment-form__input--textarea" name="fields[message]" placeholder="请输入评论内容"></textarea>
+    </span>
+    <button class="comment-form__input comment-form__input--button">提交评论</button>
+  </form>
+  <% 
+  var commentArray = [];
+  var slug = item.slug;
+  for(i in site.data){
+    var nameArray = i.split('/');
+    var postName = nameArray[0];
+    if(postName == slug){
+      commentArray.push(site.data[i]);
+    }
+  }
+ %>
+ <% if(commentArray.length > 0){ %>
+<div class="comment">
+<ul class="comment__list">
+ <% for(var i in commentArray){
+   var comment = commentArray[i];
+   var commentDate = new Date(comment.date);
+   comment.date = date(commentDate,'YYYY/MM/DD');
+  %>
+  <li class="comment__list-item">
+    <div class="comment__box">
+      <div class="comment__header">
+        <span class="comment__author-name"><%- comment.name %></span>
+        <span class="comment__submit-date"><%- comment.date %></span>
+      </div>
+      <div class="comment__content"><%- comment.message %></div>
+    </div>
+  </li>
+ <% } %>
+ </ul>
+ </div>
+ <% }else{ %>
+ <div class="comment-empty">没有任何评论</div>
+ <% } %>
+</section>
 <% } %>

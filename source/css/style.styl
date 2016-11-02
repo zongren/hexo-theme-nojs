@@ -1,11 +1,247 @@
 @import 'nib'
-@import '_partial/variables'
-@import '_partial/icon'
-@import '_partial/normalize'
-@import '_partial/content'
-$highlight_theme = hexo-config('highlight_theme')
-unless $highlight_theme
-  $highlight_theme = 'atom-one-light'
-$path = '_highlight/' + $highlight_theme 
-if $highlight_theme 
-  @import $path
+primary-color = #e74c3c
+
+.article-header__link
+  display inline-block
+  overflow-wrap normal
+  white-space nowrap
+  overflow-x hidden
+  text-overflow ellipsis
+  padding-bottom 10px
+  max-width 100%
+
+.article__excerpt
+  text-align center
+  color primary-color
+
+.article__content
+  margin-bottom 50px
+
+.header
+  height 200px
+  position relative
+  text-align center
+  vertical-align middle
+  
+.header__wrapper
+  width 100%
+  position absolute
+  top 50%
+  transform translateY(-50%)
+  
+.header__title
+  font-size 20px
+  display inline-block
+
+.header__menu
+  margin-top 20px
+
+.header__list
+  padding 0
+  margin-top 0
+  margin-bottom 0
+
+.header__list-item
+  list-style none
+  display inline
+  margin-left 5px
+  margin-right 5px
+  font-size 14px
+
+.footer
+  padding-left 20px
+  padding-right 20px
+  height 35px
+  margin-bottom 0
+
+.footer__link
+  color primary-color
+  
+.content__item
+  padding-left 20px
+  padding-right 20px
+  margin-bottom 50px
+
+.content__list-link
+  padding-bottom 10px
+
+.content__list
+  padding 0
+  margin 0
+  list-style none
+
+.content__list-item
+  display inline-block
+  width 100%
+  margin-top 10px
+
+.content__list-item--tags
+  width auto
+  margin-right 10px
+
+.content
+  min-height 100%
+  height auto !important
+  height 100%
+  margin-bottom -35px
+
+.content__push
+    height 35px
+
+.content__item
+  background-color #fff
+  padding 20px
+
+.highlight
+  margin-left 0
+  margin-right 0
+  overflow-x auto
+
+.html
+  height 100%
+  background-color #fff
+  overflow-wrap break-word
+  font-family "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+
+.body
+  height 100%
+  margin-left auto
+  margin-right auto
+  max-width 700px
+  margin-top 0
+  margin-bottom 0
+
+.pagination
+  text-align center
+  margin-bottom 50px
+
+.search-form
+  margin-bottom 50px
+  width 100%
+  margin-left auto
+  margin-right auto
+  position relative
+  height 40px
+
+.search-form__span
+  position absolute
+  left 0
+  right 50px
+  background-color #ECF0F1
+  height 40px
+  line-height 40px
+
+.search-form__input
+  outline 0
+  background-color #ECF0F1
+  border 0
+  padding 0 10px
+  box-sizing border-box
+  width 100%
+  height 30px
+  -webkit-appearance none
+
+.search-form__button
+  text-align center
+  position absolute
+  right 0
+  outline 0
+  background-color primary-color
+  border 0
+  padding 0
+  color #fff
+  cursor pointer
+  width 50px
+  box-sizing border-box
+  height 40px
+
+.comment-form
+  width 100%
+  max-width 320px
+  margin-left auto
+  margin-right auto
+  margin-bottom 50px
+
+.comment-empty
+  color #9f9f9f
+  text-align center
+  font-size 80%
+
+.comment-form__input
+  outline 0
+  width 100%
+  -webkit-appearance none
+  border none
+  background-color #ECF0F1
+  color primary-color
+  display inline-block
+
+.comment-form__input-wrapper
+  background-color #ECF0F1
+  padding 10px
+  display inline-block
+  width 100%
+  margin-top 10px
+  box-sizing border-box
+  
+.comment-form__label
+  display inline-block
+  width 100%
+  font-size 60%
+  padding 10px
+  color #999
+
+.comment-form__input.comment-form__input--textarea
+  max-width 100%
+  height 150px
+  min-height 150px
+  line-height 1
+
+.comment-form__input.comment-form__input--button
+  padding 10px
+  background-color primary-color
+  color #fff
+  margin-top 10px
+  box-sizing border-box 
+  cursor pointer
+
+.comment__list
+  list-style none
+  padding 0
+  margin 0
+  
+.comment__list-item
+  margin-bottom 20px
+
+.comment__submit-date
+  color #999
+
+.article__category-link
+  margin-right 10px
+
+//non-bem styles
+::selection 
+  background primary-color
+  color #fff
+
+a
+  text-decoration none
+  color primary-color
+
+code
+  color primary-color
+  font-family unset
+  padding 3px
+  background-color #F1F1F1
+
+.article__content img
+  max-width 100%
+
+.article__content table
+  table-layout fixed
+  width 100%
+  margin-top 5px
+  margin-bottom 5px
+  outline 0
+  border-collapse collapse
+  border-spacing 0

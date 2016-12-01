@@ -8,9 +8,18 @@
           var item = theme.menu[x];
           var url = item.url;
           var title = item.title;
+          
         %>
         <li class="header__list-item">
-          <a class="header__link" href="<%- url_for(url) %>" title="<%= title %>"><%= title %></a>
+          <a class="header__link" href="<%- url_for(url) %>" title="<%= title %>"><%= title %>
+          <% if (typeof item.isArchive != "undefined" && item.isArchive){ %>
+          <sup><%- site.posts.length %></sup>
+          <% } else if (typeof item.isTag != "undefined" && item.isTag){ %>
+          <sup><%- site.tags.length %></sup>
+          <% } else if (typeof item.isCategory != "undefined" && item.isCategory){ %>
+          <sup><%- site.categories.length %></sup>
+          <% } %>
+          </a>
         </li>
         <% } %>
       </ul>

@@ -10,7 +10,11 @@ if (item.excerpt && index){
   <article class="article">
     <% if(index){ %>
     <%- partial('article-header') %>
-    <% } %>
+    <% }else{ 
+      var tableOfContent = toc(item.content)
+      if(typeof tableOfContent != 'undefined' && tableOfContent.length > 0){ %>
+      <%- tableOfContent %>
+    <% }} %>
     <div class="article__content">
     <% if (item.photos && item.photos.length){ %>
     <div class="article__gallery">
@@ -49,19 +53,24 @@ if (item.excerpt && index){
 </section>
 <% if(theme.staticman && !index && item.comments){ %>
 <section class="content__item">
-  <form class="comment-form" method="POST" action="https://api.staticman.net/v1/entry/<%- theme.staticman %>">
+  <form class="comment-form" method="POST" action="https://api.staticman.net/v2/entry/<%- theme.staticman %>">
+    <input type="hidden" name="options[origin]" value="<%- config.url %><%- config.root %><%- item.path %>">
+    <input type="hidden" name="options[parent]" value="<%- item.slug %>">
     <input type="hidden" name="options[redirect]" value="<%- config.url %><%- config.root %><%- item.path %>">
-    <input name="options[slug]" type="hidden" value="<%- item.slug %>">
+    <input type="hidden" name="options[slug]" value="<%- item.slug %>">
     <span class="comment-form__input-wrapper">
-      <input class="comment-form__input" name="fields[name]" type="text" placeholder="请输入姓名"/>
+      <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[name]" type="text" placeholder="请输入姓名"/>
     </span>
     <span class="comment-form__input-wrapper">
-      <input class="comment-form__input" name="fields[email]" type="email" placeholder="请输入邮箱"/>
+      <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[email]" type="email" placeholder="请输入邮箱（可选）"/>
     </span>
-    <span class="comment-form__label">不会公开邮箱</span>
     <span class="comment-form__input-wrapper">
-    <textarea class="comment-form__input comment-form__input--textarea" name="fields[message]" placeholder="请输入评论内容"></textarea>
+      <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[url]" type="url" placeholder="请输入你的网站（可选）"/>
     </span>
+    <span class="comment-form__input-wrapper">
+    <textarea class="comment-form__input comment-form__input--textarea" name="fields[message]" placeholder="请输入评论内容（支持Markdown）"></textarea>
+    </span>
+    <input type="checkbox" name="options[subscribe]" value="email" id="subscribe" /><label for="subscribe">订阅此文章的评论</label>
     <button class="comment-form__input comment-form__input--button">提交评论</button>
   </form>
   <% 
@@ -86,10 +95,18 @@ if (item.excerpt && index){
   <li class="comment__list-item">
     <div class="comment__box">
       <div class="comment__header">
-        <span class="comment__author-name"><%- comment.name %></span>
+        <span class="comment__author-name">
+        <% if(typeof comment.url === "string" && comment.url.length > 0){ %>
+        <a href="<%- comment.url %>" title="<%- comment.name %>的链接" target="_blank"><%- comment.name %></a>
+        <% }else{ %>
+        <%- comment.name %>
+        <% } %>
+        </span>
         <span class="comment__submit-date"><%- comment.date %></span>
       </div>
-      <div class="comment__content"><%- comment.message %></div>
+      <div class="comment__content">
+      <%- markdown(comment.message) %>
+      </div>
     </div>
   </li>
  <% } %>

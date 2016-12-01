@@ -12,8 +12,8 @@ var items = site.tags.sort('name');
       level = max;
     }
     %>
-  <li class="content__list-item content__list-item--tags">
-  <a class="content__list-link" href="<%= url_for(item.path) %>" class="level-<%= level %>"><%= item.name %>(<%= item.posts.length %>)</a></li>
+  <li class="content__list-item content__list-item--tag">
+  <a class="content__list-link content__list-link--tag-level-<%- level %>" href="<%= url_for(item.path) %>"><%= item.name %>(<%= item.posts.length %>)</a></li>
   <% }); %>
   </ul>
 </section>

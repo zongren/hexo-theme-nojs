@@ -28,6 +28,8 @@ titleArray.push("Hexo");
 titleArray.push("nojs");
 %>
 <footer class="footer">
-    &copy;&nbsp;<%- copyright %>
-    Powered&nbsp;by&nbsp;<%- joinLinkArray(linkArray,titleArray) %>
+    <span class="footer__item">
+        &copy;&nbsp;<%- copyright %>
+        Powered&nbsp;by&nbsp;<%- joinLinkArray(linkArray,titleArray) %>
+    </span>
 </footer>

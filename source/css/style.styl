@@ -1,5 +1,6 @@
 @import 'nib'
 primary-color = #e74c3c
+footer-height = 80px
 
 .article-header__link
   display inline-block
@@ -16,6 +17,7 @@ primary-color = #e74c3c
 
 .article__content
   margin-bottom 50px
+  line-height 2
 
 .header
   height 200px
@@ -51,8 +53,14 @@ primary-color = #e74c3c
 .footer
   padding-left 20px
   padding-right 20px
-  height 35px
+  height footer-height
+  line-height footer-height
   margin-bottom 0
+
+.footer__item
+  display inline-block
+  vertical-align middle
+  line-height normal
 
 .footer__link
   color primary-color
@@ -75,7 +83,7 @@ primary-color = #e74c3c
   width 100%
   margin-top 10px
 
-.content__list-item--tags
+.content__list-item--tag
   width auto
   margin-right 10px
 
@@ -83,19 +91,14 @@ primary-color = #e74c3c
   min-height 100%
   height auto !important
   height 100%
-  margin-bottom -35px
+  margin-bottom 0 - footer-height
 
 .content__push
-    height 35px
+    height footer-height
 
 .content__item
   background-color #fff
   padding 20px
-
-.highlight
-  margin-left 0
-  margin-right 0
-  overflow-x auto
 
 .html
   height 100%
@@ -138,7 +141,6 @@ primary-color = #e74c3c
   padding 0 10px
   box-sizing border-box
   width 100%
-  height 30px
   -webkit-appearance none
 
 .search-form__button
@@ -165,7 +167,6 @@ primary-color = #e74c3c
 .comment-empty
   color #9f9f9f
   text-align center
-  font-size 80%
 
 .comment-form__input
   outline 0
@@ -173,7 +174,6 @@ primary-color = #e74c3c
   -webkit-appearance none
   border none
   background-color #ECF0F1
-  color primary-color
   display inline-block
 
 .comment-form__input-wrapper
@@ -181,16 +181,9 @@ primary-color = #e74c3c
   padding 10px
   display inline-block
   width 100%
-  margin-top 10px
   box-sizing border-box
+  margin-bottom 10px
   
-.comment-form__label
-  display inline-block
-  width 100%
-  font-size 60%
-  padding 10px
-  color #999
-
 .comment-form__input.comment-form__input--textarea
   max-width 100%
   height 150px
@@ -219,7 +212,16 @@ primary-color = #e74c3c
 .article__category-link
   margin-right 10px
 
-//non-bem styles
+.toc
+  list-style none
+
+.toc-item
+  list-style none
+
+for $num in (1..10)
+    .content__list-link--tag-level-{$num}
+      color lighten(primary-color,6% * (10 - $num))
+
 ::selection 
   background primary-color
   color #fff
@@ -228,11 +230,27 @@ a
   text-decoration none
   color primary-color
 
+pre
+  margin-left 0
+  margin-right 0
+  overflow-x auto
+  overflow-y hidden
+  background-color #F1F1F1
+
 code
   color primary-color
   font-family unset
   padding 3px
   background-color #F1F1F1
+
+pre code
+  background-color #F1F1F1
+  color #333
+
+.error
+  background #fff
+  color primary-color
+  text-align center
 
 .article__content img
   max-width 100%
@@ -245,3 +263,13 @@ code
   outline 0
   border-collapse collapse
   border-spacing 0
+
+thead
+  border-bottom-width 2px
+  border-bottom-color primary-color
+  border-bottom-style solid
+
+tr
+  border-bottom-width 1px
+  border-bottom-color primary-color
+  border-bottom-style solid

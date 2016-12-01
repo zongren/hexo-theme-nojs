@@ -4,13 +4,16 @@ menu:
   #   title: '日期'
   # - archive: 
   #   url: 'list'
+  #   isArchive: true
   #   title: '归档'
   # - tag: 
   #   url: 'tags'
   #   title: '标签'
+  #   isTag: true
   # - category: 
   #   url: 'categories'
   #   title: '分类'
+  #   isCategory: true
   # - search: 
   #   url: 'search'
   #   title: '搜索'
@@ -20,4 +23,4 @@ menu:
 #   apiKey: ""
 #   indexName: ""
 
-# staticman: 
+staticman: zongren/comment/master/

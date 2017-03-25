@@ -8,6 +8,9 @@ if (item.excerpt && index){
 %>
 <section class="content__item">
   <article class="article">
+    <% if(theme.leancloud.enable && is_post()){ %>
+    <span id="postCounterLabel">本文访问次数：</span><span id="postCounter">0</span>
+    <% } %>
     <% if(index){ %>
     <%- partial('article-header') %>
     <% }else{ 
@@ -15,7 +18,8 @@ if (item.excerpt && index){
       if(typeof tableOfContent != 'undefined' && tableOfContent.length > 0){ %>
       <%- tableOfContent %>
     <% }} %>
-    <div class="article__content">
+    
+    <div class="article__content <% if(index){ %>article__content--index<% } %>">
     <% if (item.photos && item.photos.length){ %>
     <div class="article__gallery">
       <% item.photos.forEach(function(photo){ %>
@@ -28,7 +32,7 @@ if (item.excerpt && index){
     <% if(index){ %>
       <% if (item.excerpt){ %>
       <div class="article__excerpt">
-        <a class="article__excerpt-link" href="<%- url_for(item.path) %>#more" class="more-link" title="read more">more</a>
+        <a class="article__excerpt-link" href="<%- url_for(item.path) %>#more" class="more-link" title="read more">阅读全文</a>
       </div>
       <% } %>
     <% }else{ 
@@ -53,33 +57,42 @@ if (item.excerpt && index){
 </section>
 <% if(theme.staticman && !index && item.comments){ %>
 <section class="content__item">
-  <form class="comment-form" method="POST" action="https://api.staticman.net/v2/entry/<%- theme.staticman %>">
-    <input type="hidden" name="options[origin]" value="<%- config.url %><%- config.root %><%- item.path %>">
-    <input type="hidden" name="options[parent]" value="<%- item.slug %>">
-    <input type="hidden" name="options[redirect]" value="<%- config.url %><%- config.root %><%- item.path %>">
-    <input type="hidden" name="options[slug]" value="<%- item.slug %>">
-    <span class="comment-form__input-wrapper">
-      <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[name]" type="text" placeholder="请输入姓名"/>
-    </span>
-    <span class="comment-form__input-wrapper">
-      <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[email]" type="email" placeholder="请输入邮箱（可选）"/>
-    </span>
-    <span class="comment-form__input-wrapper">
-      <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[url]" type="url" placeholder="请输入你的网站（可选）"/>
-    </span>
-    <span class="comment-form__input-wrapper">
-    <textarea class="comment-form__input comment-form__input--textarea" name="fields[message]" placeholder="请输入评论内容（支持Markdown）"></textarea>
-    </span>
-    <input type="checkbox" name="options[subscribe]" value="email" id="subscribe" /><label for="subscribe">订阅此文章的评论</label>
-    <button class="comment-form__input comment-form__input--button">提交评论</button>
-  </form>
+  <div class="comment-form-wrapper" id="comment-form-wrapper">
+    <form class="comment-form" method="POST" action="https://api.staticman.net/v2/entry/<%- theme.staticman %>master/" id="comment-form">
+      <input type="hidden" name="options[origin]" value="<%- config.url %><%- config.root %><%- item.path %>">
+      <input type="hidden" name="options[parent]" value="<%- item.slug %>">
+      <input type="hidden" name="options[redirect]" value="<%- config.url %><%- config.root %><%- item.path %>">
+      <input type="hidden" name="options[slug]" value="<%- item.slug %>">
+      <input type="hidden" name="fields[reply]" value="" id="comment-form-reply">
+      <input type="hidden" name="fields[replyTarget]" value="" id="comment-form-reply-target">
+      <span class="comment-form__input-wrapper">
+        <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[name]" type="text" placeholder="请输入姓名"/>
+      </span>
+      <span class="comment-form__input-wrapper">
+        <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[email]" type="email" placeholder="请输入邮箱（可选）"/>
+      </span>
+      <span class="comment-form__input-wrapper">
+        <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[url]" type="url" placeholder="请输入你的网站（可选）"/>
+      </span>
+      <span class="comment-form__input-wrapper">
+      <textarea class="comment-form__input comment-form__input--textarea" name="fields[message]" placeholder="请输入评论内容（支持Markdown）"  id="comment-form-message"></textarea>
+      </span>
+      <input type="submit" class="comment-form__input comment-form__input--button" id="comment-submit-button" value="提交评论">
+      <input type="hidden" name="fields[path]" value="<%- item.path %>">
+    </form>
+  </div>
+  <div class="comment-button" id="comment-button" style="display:none;"><a class="comment-button__link" href="javascript:void(0);" onclick="comment.addComment();return false;">提交评论</a></div>
+</section>
+<section class="content__item">
   <% 
   var commentArray = [];
   var slug = item.slug;
   for(i in site.data){
     var nameArray = i.split('/');
     var postName = nameArray[0];
+    
     if(postName == slug){
+      site.data[i]["fileName"] = nameArray[1];
       commentArray.push(site.data[i]);
     }
   }
@@ -87,13 +100,14 @@ if (item.excerpt && index){
  <% if(commentArray.length > 0){ %>
 <div class="comment">
 <ul class="comment__list">
- <% for(var i in commentArray){
+ <% for(var i = commentArray.length - 1;i>=0;i--){
    var comment = commentArray[i];
    var commentDate = new Date(comment.date);
    comment.date = date(commentDate,'YYYY/MM/DD');
+   var commentMessage = comment.message;
   %>
   <li class="comment__list-item">
-    <div class="comment__box">
+    <div class="comment__box" id="comment-item-<%- comment._id %>">
       <div class="comment__header">
         <span class="comment__author-name">
         <% if(typeof comment.url === "string" && comment.url.length > 0){ %>
@@ -103,10 +117,17 @@ if (item.excerpt && index){
         <% } %>
         </span>
         <span class="comment__submit-date"><%- comment.date %></span>
+        <span class="comment__reply-button"><a href="javascript:void(0);" onclick="comment.replyTo('<%- comment.name %>','<%- comment._id %>');return false;">回复</a></span>
+        <span class=""><a href="https://github.com/<%- theme.staticman %>edit/master/<%- comment._parent %>/<%- comment.fileName %>.json" target="_blank">编辑</a></span>
+        <span class=""><a href="https://github.com/<%- theme.staticman %>delete/master/<%- comment._parent %>/<%- comment.fileName %>.json" target="_blank">删除</a></span>
       </div>
       <div class="comment__content">
-      <%- markdown(comment.message) %>
+      <% if(typeof comment.reply != "undefined" && comment.reply.length > 0){
+        commentMessage = "[@" + comment.replyTarget + "](#comment-item-" + comment.reply + ")&nbsp;&nbsp;&nbsp;&nbsp;" + commentMessage;
+      } %>
+      <%- markdown(commentMessage) %>
       </div>
+      <div class="comment__form-wrapper" id="comment-item-form-wrapper-<%- comment._id %>"></div>
     </div>
   </li>
  <% } %>
@@ -116,4 +137,53 @@ if (item.excerpt && index){
  <div class="comment-empty">没有任何评论</div>
  <% } %>
 </section>
+
+<script>
+var comment = (function(){
+  var previousCommentItemFormWrapper = null;
+  var commentFormWrapper = document.getElementById("comment-form-wrapper");
+  var commentFormHtml = commentFormWrapper.innerHTML;
+  var commentButton = document.getElementById("comment-button");
+
+  var modifyForm = function(index,value){
+    document.forms[0].elements[index].value = value;
+  }
+
+  var addComment = function(){
+    if(previousCommentItemFormWrapper != null){
+      previousCommentItemFormWrapper.innerHTML = "";
+    }
+    if(commentFormWrapper.innerHTML.length>0){
+      return;
+    }
+
+    commentFormWrapper.innerHTML = commentFormHtml;
+    commentButton.style.display = "none"
+
+    modifyForm(4,"");
+    modifyForm(5,"");
+    modifyForm(9,"");
+    modifyForm(10,"提交评论");
+  }
+  var replyTo = function(name,id){
+    var commentItemFormWrapper = document.getElementById("comment-item-form-wrapper-"+id);
+    if(commentItemFormWrapper.innerHTML.length>0){
+      return;
+    }
+    if(previousCommentItemFormWrapper != null){
+      previousCommentItemFormWrapper.innerHTML = "";
+    }
+    previousCommentItemFormWrapper = commentItemFormWrapper;
+    commentFormWrapper.innerHTML = "";
+    commentItemFormWrapper.innerHTML = commentFormHtml;
+    commentButton.style.display = "block"
+
+    modifyForm(4,id);
+    modifyForm(5,name);
+    modifyForm(9,"");
+    modifyForm(10,"回复    "+name);
+  };
+  return {addComment:addComment,replyTo:replyTo};
+})();
+</script>
 <% } %>

@@ -1,26 +1,34 @@
 menu:
-  # - date: 
-  #   url: 'date'
-  #   title: '日期'
-  # - archive: 
-  #   url: 'list'
-  #   isArchive: true
-  #   title: '归档'
-  # - tag: 
-  #   url: 'tags'
-  #   title: '标签'
-  #   isTag: true
-  # - category: 
-  #   url: 'categories'
-  #   title: '分类'
-  #   isCategory: true
-  # - search: 
-  #   url: 'search'
-  #   title: '搜索'
+  - date: 
+    url: 'date'
+    title: '日期'
+  - archive: 
+    url: 'list'
+    isArchive: true
+    title: '归档'
+  - tag: 
+    url: 'tags'
+    title: '标签'
+    isTag: true
+  - category: 
+    url: 'categories'
+    title: '分类'
+    isCategory: true
+  - search: 
+    url: 'search'
+    title: '搜索'
 
 # algolia:
 #   appId: ""
 #   apiKey: ""
 #   indexName: ""
 
-staticman: zongren/comment/master/
+# staticman: 
+recent_comment: 5
+
+leancloud:
+  enable: true
+  appId: 
+  appKey: 
+
+font_name: ""

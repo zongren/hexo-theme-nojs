@@ -1,0 +1,103 @@
+<% if(theme.leancloud.enable){ %>
+<script async onload="counter.start();" src="//cdn1.lncld.net/static/js/2.1.2/av-min.js"></script>
+<script>
+var counter = (function(){
+
+    function getIp(url) {
+        var xhr = new XMLHttpRequest();
+        
+        if(typeof xhr === "undefined"){
+            return "";
+        }
+
+        xhr.open("GET","https://icanhazip.com/",true);
+        xhr.onreadystatechange=function(){
+            if (xhr.readyState==4 && xhr.status==200){
+                checkIfExist(url,xhr.responseText.replace("\n",""));
+            }
+        }
+        xhr.send();
+    }
+
+    function checkIfExist(url,ip) {
+        var query = new AV.Query('Counter');
+        query.equalTo("url", url);
+        query.count().then(
+            function (count) {
+                if(count === 0){
+                    insertRecord(url,ip);
+                }
+                else{
+                    getPostCount(url);
+                    getCount();
+                }
+            },
+            function (error) {
+                console.log(error);
+            }
+        );
+    }
+
+    function insertRecord(url,ip) {
+        var Counter = AV.Object.extend("Counter");
+        var counter = new Counter();
+        var acl = new AV.ACL();
+        acl.setPublicReadAccess(true);
+        acl.setPublicWriteAccess(true);
+        counter.setACL(acl);
+        counter.set("url",url);
+        counter.set("ip",ip);
+        counter.save().then(
+            function (counter) {
+                getPostCount(url);
+                getCount();
+            },
+            function (error) {
+                console.error(error);
+            }
+        );
+    }
+
+    function getCount(){
+        if(counterElement != null){
+            var query = new AV.Query('Counter');
+            query.count().then(
+                function (count) {
+                    counterElement.innerHTML = count;
+                },
+                function (error) {
+                    console.log(error);
+                }
+            );
+        }
+    }
+
+    function getPostCount(url) {
+        if(postCounterElement != null){
+            var query = new AV.Query('Counter');
+            query.equalTo("url", url);
+            query.count().then(
+                function (count) {
+                    postCounterElement.innerHTML = count;
+                },
+                function (error) {
+                    console.log(error);
+                }
+            );
+        }
+    }
+
+
+    var url = "<%- page.path %>";
+    var counterElement = document.getElementById("counter");
+    var postCounterElement = document.getElementById("postCounter");
+
+    var start = function(){
+        AV.init({appId:"<%- theme.leancloud.appId %>", appKey:"<%- theme.leancloud.appKey %>"});
+        getIp(url);
+    }
+
+    return {start:start};
+})();
+</script>
+<% } %>

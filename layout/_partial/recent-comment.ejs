@@ -1,0 +1,65 @@
+<% if(is_home() && page.current === 1 && theme.staticman && site.data){
+    var commentArray = [];
+    for(var i in site.data){
+        var comment = site.data[i];
+        var path = comment["path"];
+        var nameArray = i.split("/");
+        var postName = nameArray[0];
+        var fileName = nameArray[1];
+        if(typeof fileName != "undefined" && typeof path != "undefined" && path.length > 0){
+            var fileNameArray = fileName.split("-");
+            var timestamp = fileNameArray[1];
+            if(typeof timestamp != "undefined"){
+                site.data[i]["timestamp"] = timestamp;
+                site.data[i]["postName"] = postName;
+                commentArray.push(site.data[i]);
+            }
+        }
+    }
+    commentArray.sort(function compare(a, b) {
+                        if (a["timestamp"] > b["timestamp"]) {
+                            return -1;
+                        }
+                        if (a["timestamp"] < b["timestamp"]) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+ } %>
+
+ <% if(typeof commentArray != "undefined" && commentArray.length > 0){ %>
+<section class="content__item">
+<div class="comment">
+    <h3>最新评论</h3>
+    <ul class="comment__list">
+        <% for(var i = 0;i < theme.recent_comment && i < commentArray.length;i ++){
+            var comment = commentArray[i];
+            var commentMessage = comment.message;
+            var commentDate = new Date(comment.date);
+            comment.date = date(commentDate,'YYYY/MM/DD');
+             %>
+        <li class="comment__list-item">
+            <div class="comment__box">
+                <div class="comment__header">
+                    <span class="comment__author-name">
+                    <%- comment.name %>
+                    </span>
+                    <span class="comment__submit-date"><%- comment.date %></span>
+                </div>
+                <div class="comment__content">
+                <% if(typeof comment.reply != "undefined" && comment.reply.length > 0){
+                    commentMessage = "@" + comment.replyTarget + "&nbsp;&nbsp;&nbsp;&nbsp;" + commentMessage;
+                } %>
+                <%- markdown(commentMessage) %>
+                </div>
+                <div class="comment_link">
+                    <span><a href="<%= url_for(comment.path) %>#comment-item-<%- comment._id %>">查看评论</a></span>
+                    <span><a href="<%= url_for(comment.path) %>">查看文章</a></span>
+                </div>
+            </div>
+        </li>
+        <% } %>
+    </ul>
+ </div>
+ </section>
+<% } %>

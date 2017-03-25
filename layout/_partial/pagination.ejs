@@ -1,10 +1,10 @@
 <div class="pagination">
   <span class="pagination__wrapper">
   <% if (page.prev){ %>
-    <a class="pagination__link" href="<%- url_for(page.prev_link) %>" title="prev">prev</a>
+    <a class="pagination__link" href="<%- url_for(page.prev_link) %>" title="prev">上一页</a>
   <% } %>
   <% if (page.next){ %>
-    <a class="pagination__link" href="<%- url_for(page.next_link) %>" title="next">next</a>
+    <a class="pagination__link" href="<%- url_for(page.next_link) %>" title="next">下一页</a>
   <% } %>
   </span>
 </div>

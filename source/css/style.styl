@@ -12,12 +12,15 @@ footer-height = 80px
   max-width 100%
 
 .article__excerpt
-  text-align center
+  text-align left
   color primary-color
 
 .article__content
   margin-bottom 50px
   line-height 2
+
+.article__content.article__content--index
+  margin-bottom 10px
 
 .header
   height 200px
@@ -56,6 +59,7 @@ footer-height = 80px
   height footer-height
   line-height footer-height
   margin-bottom 0
+  font-size 14px
 
 .footer__item
   display inline-block
@@ -70,6 +74,9 @@ footer-height = 80px
   padding-right 20px
   margin-bottom 50px
 
+.content__item.content__item--search
+  margin-bottom 20px
+
 .content__list-link
   padding-bottom 10px
 
@@ -83,6 +90,10 @@ footer-height = 80px
   width 100%
   margin-top 10px
 
+.content__list-item--empty.content__list-item
+  color #ccc
+  text-align center
+
 .content__list-item--tag
   width auto
   margin-right 10px
@@ -94,7 +105,7 @@ footer-height = 80px
   margin-bottom 0 - footer-height
 
 .content__push
-    height footer-height
+  height footer-height
 
 .content__item
   background-color #fff
@@ -157,6 +168,10 @@ footer-height = 80px
   box-sizing border-box
   height 40px
 
+.search-form__button--disabled.search-form__button
+  background-color #ccc
+  color #999
+
 .comment-form
   width 100%
   max-width 320px
@@ -202,12 +217,15 @@ footer-height = 80px
   list-style none
   padding 0
   margin 0
-  
+
 .comment__list-item
-  margin-bottom 20px
+  margin-bottom 40px
 
 .comment__submit-date
   color #999
+
+.comment-button
+  text-align center
 
 .article__category-link
   margin-right 10px
@@ -273,3 +291,24 @@ tr
   border-bottom-width 1px
   border-bottom-color primary-color
   border-bottom-style solid
+
+#footnotelist li
+  display block
+  overflow-x  auto
+
+blockquote
+  border-left-width 3px
+  border-left-style solid
+  border-left-color primary-color
+  margin-left 0px
+  margin-right 0px
+  padding-left 10px
+  padding-right 10px
+  background-color #ECF0F1
+
+  strong
+    margin-right 10px
+
+
+.toc
+  padding-left 0

@@ -29,7 +29,14 @@ titleArray.push("nojs");
 %>
 <footer class="footer">
     <span class="footer__item">
-        &copy;&nbsp;<%- copyright %>
+        Copyright&nbsp;<%- copyright %>
         Powered&nbsp;by&nbsp;<%- joinLinkArray(linkArray,titleArray) %>
+        <% if(theme.leancloud.enable){ %>
+        <span id="counterLabel">&nbsp;本站访问次数：</span><span id="counter">0</span>
+        <% } %>
     </span>
 </footer>
+
+<% if(theme.leancloud.enable){ %>
+<%- partial('leancloud') %>
+<% } %>

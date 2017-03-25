@@ -1,0 +1,17 @@
+@import 'font-config'
+
+@font-face {
+  font-family: 'zongren';
+  src: url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.eot');
+  src:
+    url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.eot?#font-spider') format('embedded-opentype'),
+    url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.woff') format('woff'),
+    url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.ttf') format('truetype'),
+    url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.svg') format('svg');
+  font-weight: bold;
+  font-style: normal;
+}
+
+html,body {
+    font-family: 'zongren';
+}

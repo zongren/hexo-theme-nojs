@@ -1,396 +1,132 @@
-<section class="content__item">
-  <form class="search-form" name="searchForm" onsubmit="return submitSearchForm()">
+<section class="content__item content__item--search">
+  <form class="search-form" name="searchForm" onsubmit="return false;">
       <span class="search-form__span">
           <input autocomplete="off" spellcheck="false" class="search-form__input" type="search" name="query" placeholder="请输入关键词"/>
       </span>
-      <button class="search-form__button">搜索</button>
+      <button id="searchButton" class="search-form__button" onclick="return searchTool.submitSearchForm();return false;">搜索</button>
   </form>
-  <div class="content__list" id="searchResult"></div>
+  <div class="content__list" id="searchResult">
+  </div>
 </section>
 <div id="pagination" class="pagination" style="display:none">
     <span>
-      <a class="pagination__link" href="JavaScript:void(0)" id="previousPage" onclick="return previous();" title="prev">prev</a>
-      <a class="pagination__link" href="JavaScript:void(0)" id="nextPage" onclick="return next();" title="next">next</a>
+      <a class="pagination__link" href="JavaScript:void(0)" id="previousPage" onclick="return searchTool.previous();" title="prev">上一页</a>
+      <a class="pagination__link" href="JavaScript:void(0)" id="nextPage" onclick="return searchTool.next();" title="next">下一页</a>
     </span>
 </div>
 <script>
-var json_parse = (function () {
-    "use strict";
+var searchTool = (function(){
+    var button = document.getElementById("searchButton");
+    var baseUrl = window.location.protocol+"//"+window.location.host+"/";
+    var container = document.getElementById("searchResult")
+    var xmlHttpRequest= new XMLHttpRequest();
 
-    var at;
-    var ch;
-    var escapee = {
-        "\"": "\"",
-        "\\": "\\",
-        "/": "/",
-        b: "\b",
-        f: "\f",
-        n: "\n",
-        r: "\r",
-        t: "\t"
-    };
-    var text;
+    if(typeof JSON === 'undefined' || typeof xmlHttpRequest === 'undefined'){
+        button.disabled = true;
+        button.className = "search-form__button--disabled "+button.className;
+        showEmptyView("您的浏览器不支持搜索");
+    }
 
-    var error = function (m) {
-        throw {
-            name: "SyntaxError",
-            message: m,
-            at: at,
-            text: text
-        };
-    };
+    function createLink(title,link,dateString){
+        var titleLinkNode = document.createElement('a');
+        titleLinkNode.className = 'article-header__link';
+        titleLinkNode.href = link;
+        titleLinkNode.innerHTML = title;
+        var articleNode = document.createElement('div');
+        articleNode.className = 'article-header';
+        articleNode.appendChild(titleLinkNode);
+        return articleNode;
+    }
 
-    var next = function (c) {
-        if (c && c !== ch) {
-            error("Expected '" + c + "' instead of '" + ch + "'");
-        }
-        ch = text.charAt(at);
-        at += 1;
-        return ch;
-    };
+    var url = window.location.protocol+"//<%- theme.algolia.appId %>-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=<%- theme.algolia.appId %>&x-algolia-api-key=<%- theme.algolia.apiKey %>";
+    var pagination = document.getElementById('pagination');
+    var previousPage = document.getElementById('previousPage');
+    var nextPage = document.getElementById('nextPage');
+    var hitsPerPage = 5;
+    var page = 0;
 
-    var number = function () {
-        var value;
-        var string = "";
-
-        if (ch === "-") {
-            string = "-";
-            next("-");
-        }
-        while (ch >= "0" && ch <= "9") {
-            string += ch;
-            next();
-        }
-        if (ch === ".") {
-            string += ".";
-            while (next() && ch >= "0" && ch <= "9") {
-                string += ch;
-            }
-        }
-        if (ch === "e" || ch === "E") {
-            string += ch;
-            next();
-            if (ch === "-" || ch === "+") {
-                string += ch;
-                next();
-            }
-            while (ch >= "0" && ch <= "9") {
-                string += ch;
-                next();
-            }
-        }
-        value = +string;
-        if (!isFinite(value)) {
-            error("Bad number");
-        } else {
-            return value;
-        }
-    };
-
-    var string = function () {
-        var hex;
-        var i;
-        var value = "";
-        var uffff;
-        if (ch === "\"") {
-            while (next()) {
-                if (ch === "\"") {
-                    next();
-                    return value;
-                }
-                if (ch === "\\") {
-                    next();
-                    if (ch === "u") {
-                        uffff = 0;
-                        for (i = 0; i < 4; i += 1) {
-                            hex = parseInt(next(), 16);
-                            if (!isFinite(hex)) {
-                                break;
-                            }
-                            uffff = uffff * 16 + hex;
-                        }
-                        value += String.fromCharCode(uffff);
-                    } else if (typeof escapee[ch] === "string") {
-                        value += escapee[ch];
-                    } else {
-                        break;
-                    }
-                } else {
-                    value += ch;
-                }
-            }
-        }
-        error("Bad string");
-    };
-
-    var white = function () {
-        while (ch && ch <= " ") {
-            next();
-        }
-    };
-
-    var word = function () {
-        switch (ch) {
-        case "t":
-            next("t");
-            next("r");
-            next("u");
-            next("e");
-            return true;
-        case "f":
-            next("f");
-            next("a");
-            next("l");
-            next("s");
-            next("e");
+    function submitSearchForm(){
+        if(button.disabled){
             return false;
-        case "n":
-            next("n");
-            next("u");
-            next("l");
-            next("l");
-            return null;
         }
-        error("Unexpected '" + ch + "'");
-    };
-
-    var value;
-    var array = function () {
-        var arr = [];
-
-        if (ch === "[") {
-            next("[");
-            white();
-            if (ch === "]") {
-                next("]");
-                return arr;
-            }
-            while (ch) {
-                arr.push(value());
-                white();
-                if (ch === "]") {
-                    next("]");
-                    return arr;
-                }
-                next(",");
-                white();
-            }
-        }
-        error("Bad array");
-    };
-
-    var object = function () {
-        var key;
-        var obj = {};
-
-        if (ch === "{") {
-            next("{");
-            white();
-            if (ch === "}") {
-                next("}");
-                return obj;
-            }
-            while (ch) {
-                key = string();
-                white();
-                next(":");
-                if (Object.hasOwnProperty.call(obj, key)) {
-                    error("Duplicate key '" + key + "'");
-                }
-                obj[key] = value();
-                white();
-                if (ch === "}") {
-                    next("}");
-                    return obj;
-                }
-                next(",");
-                white();
-            }
-        }
-        error("Bad object");
-    };
-
-    value = function () {
-        white();
-        switch (ch) {
-        case "{":
-            return object();
-        case "[":
-            return array();
-        case "\"":
-            return string();
-        case "-":
-            return number();
-        default:
-            return (ch >= "0" && ch <= "9")
-                ? number()
-                : word();
-        }
-    };
-    return function (source, reviver) {
-        var result;
-
-        text = source;
-        at = 0;
-        ch = " ";
-        result = value();
-        white();
-        if (ch) {
-            error("Syntax error");
-        }
-
-        return (typeof reviver === "function")
-            ? (function walk(holder, key) {
-                var k;
-                var v;
-                var val = holder[key];
-                if (val && typeof val === "object") {
-                    for (k in val) {
-                        if (Object.prototype.hasOwnProperty.call(val, k)) {
-                            v = walk(val, k);
-                            if (v !== undefined) {
-                                val[k] = v;
-                            } else {
-                                delete val[k];
-                            }
-                        }
-                    }
-                }
-                return reviver.call(holder, key, val);
-            }({"": result}, ""))
-            : result;
-    };
-}());
-var D= new Date('2011-06-02T09:34:29+02:00');
-  if(!D || +D!== 1307000069000){
-      Date.fromISO= function(s){
-          var day, tz,
-          rx=/^(\d{4}\-\d\d\-\d\d([tT ][\d:\.]*)?)([zZ]|([+\-])(\d\d):(\d\d))?$/,
-          p= rx.exec(s) || [];
-          if(p[1]){
-              day= p[1].split(/\D/);
-              for(var i= 0, L= day.length; i<L; i++){
-                  day[i]= parseInt(day[i], 10) || 0;
-              };
-              day[1]-= 1;
-              day= new Date(Date.UTC.apply(Date, day));
-              if(!day.getDate()) return NaN;
-              if(p[5]){
-                  tz= (parseInt(p[5], 10)*60);
-                  if(p[6]) tz+= parseInt(p[6], 10);
-                  if(p[4]== '+') tz*= -1;
-                  if(tz) day.setUTCMinutes(day.getUTCMinutes()+ tz);
-              }
-              return day;
-          }
-          return NaN;
-      }
-  }
-  else{
-      Date.fromISO= function(s){
-          return new Date(s);
-      }
-  }
-var baseUrl = window.location.protocol+"//"+window.location.host+"/";
-var container = document.getElementById("searchResult")
-var xmlHttpRequest;
-if (window.XMLHttpRequest) {
-    //Firefox, Opera, IE7, and other browsers will use the native object
-    xmlHttpRequest = new XMLHttpRequest();
-} else {
-    //IE 5 and 6 will use the ActiveX control
-    xmlHttpRequest= new ActiveXObject("Microsoft.XMLHTTP");
-}
-
-function createLink(title,link,dateString){
-    var titleLinkNode = document.createElement('a');
-    titleLinkNode.className = 'article-header__link';
-    titleLinkNode.href = link;
-    titleLinkNode.innerHTML = title;
-    var articleNode = document.createElement('div');
-    articleNode.className = 'article-header';
-    articleNode.appendChild(titleLinkNode);
-    return articleNode;
-}
-
-var url = window.location.protocol+"//<%- theme.algolia.appId %>-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=<%- theme.algolia.appId %>&x-algolia-api-key=<%- theme.algolia.apiKey %>";
-var pagination = document.getElementById('pagination');
-var previousPage = document.getElementById('previousPage');
-var nextPage = document.getElementById('nextPage');
-var hitsPerPage = 5;
-var page = 0;
-
-function submitSearchForm(){
-    page = 0;
-    search();
-    return false;
-}
-
-function next(){
-    page ++;
-    search();
-    return false;
-}
-
-function previous(){
-    page -- ;
-    search();
-    return false;
-}
-
-function search(){
-    var query = searchForm.query.value;
-    var params = "{\"requests\":[{\"indexName\":\"<%- theme.algolia.indexName %>\",\"params\":\"query="+query+"&hitsPerPage="+hitsPerPage+"&page="+page+"\"}]}";
-
-    xmlHttpRequest.open("POST",url,true);
-    xmlHttpRequest.onreadystatechange=function()
-    {
-        if (xmlHttpRequest.readyState==4 && xmlHttpRequest.status==200)
-        {
-            var resultString = xmlHttpRequest.responseText;
-            var resultJson;
-            if(typeof JSON === 'undefined'){
-                resultJson = json_parse(resultString);
-            }
-            else{
-                resultJson = JSON.parse(resultString);
-            }
-            callback(resultJson);
-        }
+        page = 0;
+        search();
+        return false;
     }
-    xmlHttpRequest.send(params);
-}
 
-function callback(resultJson){
-    var result = resultJson.results[0];
-    var hits = result.hits;
-    var nbHits = result.nbHits;
-    var nbPages = result.nbPages;
-
-    if(nbPages > 1){
-        pagination.style.display = "";
+    function next(){
+        page ++;
+        search();
+        return false;
     }
-    else{
+
+    function previous(){
+        page -- ;
+        search();
+        return false;
+    }
+
+    function search(){
+        var query = searchForm.query.value;
+        var params = "{\"requests\":[{\"indexName\":\"<%- theme.algolia.indexName %>\",\"params\":\"query="+query+"&hitsPerPage="+hitsPerPage+"&page="+page+"\"}]}";
+
+        xmlHttpRequest.open("POST",url,true);
+        xmlHttpRequest.onreadystatechange=function(){
+            if (xmlHttpRequest.readyState==4 && xmlHttpRequest.status==200){
+                var resultString = xmlHttpRequest.responseText;
+                var resultJson = JSON.parse(resultString);
+                searchCallback(resultJson);
+            }
+        }
+        xmlHttpRequest.send(params);
+    }
+
+    function showEmptyView(content){
         pagination.style.display = "none";
+        container.innerHTML = "";
+        var contentElement = document.createElement("div");
+        contentElement.className = "content__list-item content__list-item--empty";
+        contentElement.innerHTML = content;
+        container.appendChild(contentElement);
     }
-    if(page+1<nbPages){
-        nextPage.style.display = "";
+
+    function searchCallback(resultJson){
+        var result = resultJson.results[0];
+        var hits = result.hits;
+        var nbHits = result.nbHits;
+        var nbPages = result.nbPages;
+        if(hits.length <= 0){
+            showEmptyView("找不到任何文章");
+            return;
+        }
+        if(nbPages > 1){
+            pagination.style.display = "";
+        }
+        else{
+            pagination.style.display = "none";
+        }
+        if(page+1<nbPages){
+            nextPage.style.display = "";
+        }
+        else{
+            nextPage.style.display = "none";
+        }
+        if(page>0){
+            previousPage.style.display = "";
+        }
+        else{
+            previousPage.style.display = "none";
+        }
+        
+        container.innerHTML = "";
+        for(i in hits){
+            var post = hits[i];
+            var link = createLink(post.title,baseUrl + post.path,post.date);
+            container.appendChild(link);
+        }
+
     }
-    else{
-        nextPage.style.display = "none";
-    }
-    if(page>0){
-        previousPage.style.display = "";
-    }
-    else{
-        previousPage.style.display = "none";
-    }
+    return {submitSearchForm:submitSearchForm,previous:previous,next:next};
     
-    container.innerHTML = "";
-    for(i in hits){
-        var post = hits[i];
-        var link = createLink(post.title,baseUrl + post.path,post.date);
-        container.appendChild(link);
-    }
-}
+})();
 </script>

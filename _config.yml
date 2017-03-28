@@ -23,7 +23,7 @@ menu:
 #   apiKey: ""
 #   indexName: ""
 
-# staticman: 
+staticman: 
 recent_comment: 5
 
 leancloud:
@@ -31,4 +31,4 @@ leancloud:
   appId: 
   appKey: 
 
-font_name: ""
+font_name: 

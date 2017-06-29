@@ -1,19 +1,3 @@
-<% 
-var step = 2;
-var max = 10;
-var items = site.tags.sort('name');
-%>
 <section class="content__item content__item--tags">
-  <ul class="content__list">
-  <% items.each(function(item){ 
-    var length = item.posts.length;
-    var level = Math.ceil(length / step);
-    if(level > max){
-      level = max;
-    }
-    %>
-  <li class="content__list-item content__list-item--tag">
-  <a class="content__list-link content__list-link--tag-level-<%- level %>" href="<%= url_for(item.path) %>"><%= item.name %>(<%= item.posts.length %>)</a></li>
-  <% }); %>
-  </ul>
+  <%- tagcloud({"amount":0,"min_font":18,"max_font":42,"color":true,"start_color":"#e74c3c","end_color":"#e74c3c"}) %>
 </section>

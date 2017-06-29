@@ -1,41 +1,91 @@
 <%
 var content = "";
-if (item.excerpt && index){
-  content = item.excerpt;
-}else{
-  content = item.content;
+if(index){
+  if(item.excerpt){
+    content = item.excerpt;
+  }
+  else{
+    content = item.title;
+  }
 }
+else{
+ content = item.content;
+}
+
+  if(!item.excerpt){
+    item.excerpt = item.title;
+  }
+
+var nextPage = page.next;
+var prevPage = page.prev;
+var vscode = env.args["vscode"];
+if(typeof vscode === "undefined"){
+  vscode = "true";
+}
+vscode = vscode === "true";
+var editing = theme.editing;
+var keyName = theme.comment.keyName;
+var keyMessage = theme.comment.keyMessage;
 %>
-<section class="content__item">
-  <article class="article">
-    <% if(theme.leancloud.enable && is_post()){ %>
-    <span id="postCounterLabel">本文访问次数：</span><span id="postCounter">0</span>
-    <% } %>
-    <% if(index){ %>
-    <%- partial('article-header') %>
-    <% }else{ 
+  <section class="content__item">
+    <article class="article">
+      <% if(is_post() && editing){
+        var target = "_self";
+        var fullPath = page.full_source;
+      if(vscode){
+        var fullPathArray = fullPath.split(":");
+        if(fullPathArray.length > 1){
+          fullPath = fullPathArray[fullPathArray.length-1];
+        }else{
+          fullPath = fullPathArray[0];
+        }
+        fullPath = fullPath.replace(/\\/g,"/");
+        fullPath = "vscode://file"+fullPath;
+      }
+      else{
+        target = "_blank";
+        fullPath = "https://gitlab.com/zongren/zongren.gitlab.io/edit/master/source/"+page.source;
+      }
+        
+        %>
+        <div class="article__header-link">
+          <a href="<%= fullPath %>" target="<%= target %>">编辑</a>
+        </div>
+        <% if (item.excerpt){ %>
+        <blockquote>
+        <%= item.excerpt %>
+        </blockquote>
+        <% } %>
+        <% } %>
+          <% if(theme.leancloud.enable && is_post()){ %>
+            <span id="postCounterLabel">本文访问次数：</span><span id="postCounter">0</span>
+            <% } %>
+
+              <% if(index){ %>
+                <%- partial('article-header') %>
+                  <% }else{ 
       var tableOfContent = toc(item.content)
       if(typeof tableOfContent != 'undefined' && tableOfContent.length > 0){ %>
-      <%- tableOfContent %>
-    <% }} %>
-    
-    <div class="article__content <% if(index){ %>article__content--index<% } %>">
-    <% if (item.photos && item.photos.length){ %>
-    <div class="article__gallery">
-      <% item.photos.forEach(function(photo){ %>
-        <img class="article__gallery-image" alt="photo" src="<%- url_for(photo) %>">
-      <% }); %>
-    </div>
-    <% } %>
-    <%- content %>
-    </div>
-    <% if(index){ %>
-      <% if (item.excerpt){ %>
-      <div class="article__excerpt">
-        <a class="article__excerpt-link" href="<%- url_for(item.path) %>#more" class="more-link" title="read more">阅读全文</a>
-      </div>
-      <% } %>
-    <% }else{ 
+                    <%- tableOfContent %>
+                      <% }} %>
+
+                        <div class="article__content <% if(index){ %>article__content--index<% } %>">
+                          <% if (item.photos && item.photos.length){ %>
+                            <div class="article__gallery">
+                              <% item.photos.forEach(function(photo){ %>
+                                <img class="article__gallery-image" alt="photo" src="<%- url_for(photo) %>">
+                                <% }); %>
+                            </div>
+                            <% } %>
+                              <%- content %>
+                        </div>
+                        <% if(index){ %>
+                          <% if (item.excerpt){ %>
+                            <div class="article__excerpt">
+                              <a class="article__excerpt-link" href="<%- url_for(item.path) %>#more" class="more-link" title="read more">阅读全文</a>
+                            </div>
+                            <% } %>
+                              <% }else{ 
       var linkArray = [];
       if (item.categories && item.categories.length){ 
         item.categories.forEach(function(category){
@@ -49,141 +99,185 @@ if (item.excerpt && index){
       }
       if(linkArray.length){
     %>
-    <span class="article__category">
+                                <span class="article__category">
       <%- linkArray.join('') %>
     </span>
-    <% }} %>
-  </article>
-</section>
-<% if(theme.staticman && !index && item.comments){ %>
-<section class="content__item">
-  <div class="comment-form-wrapper" id="comment-form-wrapper">
-    <form class="comment-form" method="POST" action="https://api.staticman.net/v2/entry/<%- theme.staticman %>master/" id="comment-form">
-      <input type="hidden" name="options[origin]" value="<%- config.url %><%- config.root %><%- item.path %>">
-      <input type="hidden" name="options[parent]" value="<%- item.slug %>">
-      <input type="hidden" name="options[redirect]" value="<%- config.url %><%- config.root %><%- item.path %>">
-      <input type="hidden" name="options[slug]" value="<%- item.slug %>">
-      <input type="hidden" name="fields[reply]" value="" id="comment-form-reply">
-      <input type="hidden" name="fields[replyTarget]" value="" id="comment-form-reply-target">
-      <span class="comment-form__input-wrapper">
-        <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[name]" type="text" placeholder="请输入姓名"/>
+
+                                <% if(typeof prevPage != "undefined"){ %>
+                                  <div class="article__footer-link">
+                                    上一篇：
+                                    <a href="<%= url_for(prevPage.path) %>">
+                                      <%= prevPage.title %>
+                                    </a>
+                                  </div>
+                                  <% } %>
+                                    <% if(typeof nextPage != "undefined"){ %>
+                                      <div class="article__footer-link">
+                                        下一篇：
+                                        <a href="<%= url_for(nextPage.path) %>">
+                                          <%= nextPage.title %>
+                                        </a>
+                                      </div>
+                                      <% } %>
+                                        <% if(editing){ %>
+                                          <div class="article__footer-link">
+                                            <a href="<%= fullPath %>" target="<%= target %>">编辑</a>
+                                          </div>
+                                          <% } %>
+                                            <% }} %>
+
+    </article>
+  </section>
+  <% if(theme.staticman && !index && item.comments){ %>
+    <% if(theme.comment_enable){ %>
+      <section class="content__item">
+        <div class="comment-form-wrapper" id="comment-form-wrapper">
+          <form class="comment-form" method="POST" action="https://api.staticman.net/v2/entry/<%- theme.staticman %>master/" id="comment-form">
+            <input type="hidden" name="options[origin]" value="<%- config.url %><%- config.root %><%- item.path %>">
+            <input type="hidden" name="options[parent]" value="<%- item.slug %>">
+            <input type="hidden" name="options[redirect]" value="<%- config.url %><%- config.root %><%- item.path %>">
+            <input type="hidden" name="options[slug]" value="<%- item.slug %>">
+            <input type="hidden" name="fields[reply]" value="" id="comment-form-reply">
+            <input type="hidden" name="fields[replyTarget]" value="" id="comment-form-reply-target">
+            <span class="comment-form__input-wrapper">
+        <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[<%- keyName %>]" type="text" placeholder="请输入姓名"/>
       </span>
-      <span class="comment-form__input-wrapper">
+            <span class="comment-form__input-wrapper">
         <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[email]" type="email" placeholder="请输入邮箱（可选）"/>
       </span>
-      <span class="comment-form__input-wrapper">
+            <span class="comment-form__input-wrapper">
         <input autocomplete="off" spellcheck="false" class="comment-form__input" name="fields[url]" type="url" placeholder="请输入你的网站（可选）"/>
       </span>
-      <span class="comment-form__input-wrapper">
-      <textarea class="comment-form__input comment-form__input--textarea" name="fields[message]" placeholder="请输入评论内容（支持Markdown）"  id="comment-form-message"></textarea>
+            <span class="comment-form__input-wrapper">
+      <textarea class="comment-form__input comment-form__input--textarea" name="fields[<%- keyMessage %>]" placeholder="请输入评论内容（支持Markdown）"  id="comment-form-message"></textarea>
       </span>
-      <input type="submit" class="comment-form__input comment-form__input--button" id="comment-submit-button" value="提交评论">
-      <input type="hidden" name="fields[path]" value="<%- item.path %>">
-    </form>
-  </div>
-  <div class="comment-button" id="comment-button" style="display:none;"><a class="comment-button__link" href="javascript:void(0);" onclick="comment.addComment();return false;">提交评论</a></div>
-</section>
-<section class="content__item">
-  <% 
-  var commentArray = [];
-  var slug = item.slug;
-  for(i in site.data){
-    var nameArray = i.split('/');
-    var postName = nameArray[0];
-    
-    if(postName == slug){
-      site.data[i]["fileName"] = nameArray[1];
-      commentArray.push(site.data[i]);
-    }
-  }
- %>
- <% if(commentArray.length > 0){ %>
-<div class="comment">
-<ul class="comment__list">
- <% for(var i = commentArray.length - 1;i>=0;i--){
-   var comment = commentArray[i];
-   var commentDate = new Date(comment.date);
-   comment.date = date(commentDate,'YYYY/MM/DD');
-   var commentMessage = comment.message;
-  %>
-  <li class="comment__list-item">
-    <div class="comment__box" id="comment-item-<%- comment._id %>">
-      <div class="comment__header">
-        <span class="comment__author-name">
-        <% if(typeof comment.url === "string" && comment.url.length > 0){ %>
-        <a href="<%- comment.url %>" title="<%- comment.name %>的链接" target="_blank"><%- comment.name %></a>
-        <% }else{ %>
-        <%- comment.name %>
-        <% } %>
-        </span>
-        <span class="comment__submit-date"><%- comment.date %></span>
-        <span class="comment__reply-button"><a href="javascript:void(0);" onclick="comment.replyTo('<%- comment.name %>','<%- comment._id %>');return false;">回复</a></span>
-        <span class=""><a href="https://github.com/<%- theme.staticman %>edit/master/<%- comment._parent %>/<%- comment.fileName %>.json" target="_blank">编辑</a></span>
-        <span class=""><a href="https://github.com/<%- theme.staticman %>delete/master/<%- comment._parent %>/<%- comment.fileName %>.json" target="_blank">删除</a></span>
-      </div>
-      <div class="comment__content">
-      <% if(typeof comment.reply != "undefined" && comment.reply.length > 0){
+            <input type="submit" class="comment-form__input comment-form__input--button" id="comment-submit-button" value="提交评论">
+            <input type="hidden" name="fields[path]" value="<%- item.path %>">
+          </form>
+        </div>
+        <div class="comment-button" id="comment-button" style="display:none;"><a class="comment-button__link" href="javascript:void(0);" onclick="comment.addComment();return false;">提交评论</a></div>
+      </section>
+      <script>
+        var comment = (function () {
+          var initialized = false;
+          var previousCommentItemFormWrapper = null;
+          var commentFormWrapper = document.getElementById("comment-form-wrapper");
+          var commentFormHtml = commentFormWrapper.innerHTML;
+          var commentButton = document.getElementById("comment-button");
+
+          var modifyForm = function (index, value) {
+            document.forms[0].elements[index].value = value;
+          }
+
+          var addComment = function () {
+            if (previousCommentItemFormWrapper != null) {
+              previousCommentItemFormWrapper.innerHTML = "";
+            }
+            if (commentFormWrapper.innerHTML.length > 0) {
+              return;
+            }
+
+            commentFormWrapper.innerHTML = commentFormHtml;
+            commentButton.style.display = "none"
+
+            modifyForm(4, "");
+            modifyForm(5, "");
+            modifyForm(9, "");
+            modifyForm(10, "提交评论");
+          }
+          var replyTo = function (name, id) {
+            var commentItemFormWrapper = document.getElementById("comment-item-form-wrapper-" + id);
+            if (commentItemFormWrapper.innerHTML.length > 0) {
+              return;
+            }
+            if (previousCommentItemFormWrapper != null) {
+              previousCommentItemFormWrapper.innerHTML = "";
+            }
+            previousCommentItemFormWrapper = commentItemFormWrapper;
+            commentFormWrapper.innerHTML = "";
+            commentItemFormWrapper.innerHTML = commentFormHtml;
+            commentButton.style.display = "block"
+
+            modifyForm(4, id);
+            modifyForm(5, name);
+            modifyForm(9, "");
+            modifyForm(10, "回复    " + name);
+          };
+
+          var init = function () {
+            if (initialized) {
+              return;
+            }
+            modifyForm(2, window.location.href);
+            initialized = true;
+          }
+          return { init: init, addComment: addComment, replyTo: replyTo };
+        })();
+        comment.init();
+      </script>
+      <% } %>
+        <% if(theme.comment_history){ %>
+          <section class="content__item">
+            <% 
+              var commentArray = [];
+              var slug = item.slug;
+              for(i in site.data){
+                var nameArray = i.split('/');
+                var postName = nameArray[0];
+                
+                if(postName == slug){
+                  site.data[i]["fileName"] = nameArray[1];
+                  commentArray.push(site.data[i]);
+                }
+              }
+            %>
+              <% if(commentArray.length > 0){ %>
+                <div class="comment">
+                  <ul class="comment__list">
+                    <% for(var i = commentArray.length - 1;i>=0;i--){
+                      
+                      var comment = commentArray[i];
+                      var commentDate = new Date(comment.date);
+                      comment.date = date(commentDate,'YYYY/MM/DD');
+                      
+                      var commentName = comment[keyName];
+                      var commentMessage = comment[keyMessage];
+                      
+                      %>
+                      <li class="comment__list-item">
+                        <div class="comment__box" id="comment-item-<%- comment._id %>">
+                          <div class="comment__header">
+                            <span class="comment__author-name">
+                            <% if(typeof comment.url === "string" && comment.url.length > 0){ %>
+                            <a href="<%- comment.url %>" title="<%- commentName %>的链接" target="_blank"><%- commentName %></a>
+                            <% }else{ %>
+                            <%- commentName %>
+                            <% } %>
+                            </span>
+                            <span class="comment__submit-date"><%- comment.date %></span>
+                            <% if(theme.comment_enable){ %>
+                              <span class="comment__reply-button"><a href="javascript:void(0);" onclick="comment.replyTo('<%- commentName %>','<%- comment._id %>');return false;">回复</a></span>
+                              <% } %>
+                                <span class=""><a href="https://github.com/<%- theme.staticman %>edit/master/_data/<%- comment._parent %>/<%- comment.fileName %>.json" target="_blank">编辑</a></span>
+                                <span class=""><a href="https://github.com/<%- theme.staticman %>delete/master/_data/<%- comment._parent %>/<%- comment.fileName %>.json" target="_blank">删除</a></span>
+                          </div>
+                          <div class="comment__content">
+                            <% if(typeof comment.reply != "undefined" && comment.reply.length > 0){
         commentMessage = "[@" + comment.replyTarget + "](#comment-item-" + comment.reply + ")&nbsp;&nbsp;&nbsp;&nbsp;" + commentMessage;
       } %>
-      <%- markdown(commentMessage) %>
-      </div>
-      <div class="comment__form-wrapper" id="comment-item-form-wrapper-<%- comment._id %>"></div>
-    </div>
-  </li>
- <% } %>
- </ul>
- </div>
- <% }else{ %>
- <div class="comment-empty">没有任何评论</div>
- <% } %>
-</section>
+                              <%- markdown(commentMessage) %>
+                          </div>
+                          <div class="comment__form-wrapper" id="comment-item-form-wrapper-<%- comment._id %>"></div>
+                        </div>
+                      </li>
+                      <% } %>
+                  </ul>
+                </div>
+                <% }else{ %>
+                  <div class="comment-empty">没有任何评论</div>
+                  <% } %>
+          </section>
+          <% } %>
 
-<script>
-var comment = (function(){
-  var previousCommentItemFormWrapper = null;
-  var commentFormWrapper = document.getElementById("comment-form-wrapper");
-  var commentFormHtml = commentFormWrapper.innerHTML;
-  var commentButton = document.getElementById("comment-button");
 
-  var modifyForm = function(index,value){
-    document.forms[0].elements[index].value = value;
-  }
-
-  var addComment = function(){
-    if(previousCommentItemFormWrapper != null){
-      previousCommentItemFormWrapper.innerHTML = "";
-    }
-    if(commentFormWrapper.innerHTML.length>0){
-      return;
-    }
-
-    commentFormWrapper.innerHTML = commentFormHtml;
-    commentButton.style.display = "none"
-
-    modifyForm(4,"");
-    modifyForm(5,"");
-    modifyForm(9,"");
-    modifyForm(10,"提交评论");
-  }
-  var replyTo = function(name,id){
-    var commentItemFormWrapper = document.getElementById("comment-item-form-wrapper-"+id);
-    if(commentItemFormWrapper.innerHTML.length>0){
-      return;
-    }
-    if(previousCommentItemFormWrapper != null){
-      previousCommentItemFormWrapper.innerHTML = "";
-    }
-    previousCommentItemFormWrapper = commentItemFormWrapper;
-    commentFormWrapper.innerHTML = "";
-    commentItemFormWrapper.innerHTML = commentFormHtml;
-    commentButton.style.display = "block"
-
-    modifyForm(4,id);
-    modifyForm(5,name);
-    modifyForm(9,"");
-    modifyForm(10,"回复    "+name);
-  };
-  return {addComment:addComment,replyTo:replyTo};
-})();
-</script>
-<% } %>
+            <% } %>

@@ -27,14 +27,20 @@
                     });
  } %>
 
- <% if(typeof commentArray != "undefined" && commentArray.length > 0){ %>
+ <% if(typeof commentArray != "undefined" && commentArray.length > 0 && theme.recent_comment > 0){
+            var keyName = theme.comment.keyName;
+            var keyMessage = theme.comment.keyMessage;
+      %>
 <section class="content__item">
 <div class="comment">
     <h3>最新评论</h3>
     <ul class="comment__list">
         <% for(var i = 0;i < theme.recent_comment && i < commentArray.length;i ++){
+
             var comment = commentArray[i];
-            var commentMessage = comment.message;
+            var commentName = comment[keyName];
+            var commentMessage = comment[keyMessage];
+            
             var commentDate = new Date(comment.date);
             comment.date = date(commentDate,'YYYY/MM/DD');
              %>
@@ -42,7 +48,7 @@
             <div class="comment__box">
                 <div class="comment__header">
                     <span class="comment__author-name">
-                    <%- comment.name %>
+                    <%- commentName %>
                     </span>
                     <span class="comment__submit-date"><%- comment.date %></span>
                 </div>

@@ -4,11 +4,13 @@
     </a>
     <nav class="header__menu">
       <ul class="header__list">
-        <% for(var x in theme.menu){ 
+        <% for(var x in theme.menu){
           var item = theme.menu[x];
+          if((item.isComment || item.isBoard) && !theme.staticman){
+            continue
+          }
           var url = item.url;
           var title = item.title;
-          
         %>
         <li class="header__list-item">
           <a class="header__link" href="<%- url_for(url) %>" title="<%= title %>"><%= title %>

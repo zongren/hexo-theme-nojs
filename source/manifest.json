@@ -4,7 +4,7 @@
     "start_url": ".",
     "display": "standalone",
     "background_color": "#000",
-    "description": "其实只是个人笔记，不对内容准确性负责~",
+    "description": "宗仁的博客",
     "icons": [
         {
             "src": "/images/icon-48x48.png",

@@ -2,17 +2,19 @@ $font_name = hexo-config("font_name");
 if $font_name
   @font-face
     font-family 'nojs'
-    src url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.eot');
-    src url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.eot?#font-spider') format('embedded-opentype'),
-    url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.woff') format('woff'),
-    url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.ttf') format('truetype'),
-    url('/builds/zongren/zongren.gitlab.io/public/fonts/'+$font_name+'.svg') format('svg');
+    src url('/fonts/' + $font_name + '.eot');
+    src url('/fonts/' + $font_name + '.eot?#font-spider') format('embedded-opentype'),
+    url('/fonts/' + $font_name + '.woff') format('woff'),
+    url('/fonts/' + $font_name + '.ttf') format('truetype'),
+    url('/fonts/' + $font_name + '.svg') format('svg');
     font-weight normal
     font-style normal
 
   body
     font-family 'nojs'
-
+else
+  body
+    font-family: -apple-system, "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN", "Source Han Sans SC", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
 @import 'nib'
 primary-color = #e74c3c
 footer-height = 80px
@@ -130,7 +132,6 @@ footer-height = 80px
   height 100%
   background-color #fff
   overflow-wrap break-word
-  font-family "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
 
 .body
   height 100%
@@ -145,12 +146,18 @@ footer-height = 80px
   margin-bottom 50px
 
 .search-form
-  margin-bottom 50px
+  margin-bottom 20px
   width 100%
   margin-left auto
   margin-right auto
   position relative
   height 40px
+
+.power-by
+  margin-bottom 20px
+
+.power-by__image
+  width 150px
 
 .search-form__span
   position absolute
@@ -248,15 +255,21 @@ footer-height = 80px
 .article__category-link
   margin-right 10px
 
+.article__footer-link
+  margin-top 10px
+
+.article__header-link
+  margin-bottom 10px
+  
 .toc
   list-style none
 
 .toc-item
   list-style none
 
-for $num in (1..10)
-    .content__list-link--tag-level-{$num}
-      color lighten(primary-color,6% * (10 - $num))
+.article-header-list
+  list-style none
+  line-height 2
 
 ::selection 
   background primary-color
@@ -280,7 +293,13 @@ code
 pre code
   background-color #F1F1F1
   color #333
+
+br,pre code
   font-family: -apple-system, "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN", "Source Han Sans SC", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+
+// td
+//   word-wrap break-word
+//   text-align center
 
 .error
   background #fff
@@ -291,7 +310,6 @@ pre code
   max-width 100%
 
 .article__content table
-  table-layout fixed
   width 100%
   margin-top 5px
   margin-bottom 5px

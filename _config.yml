@@ -17,18 +17,45 @@ menu:
   - search: 
     url: 'search'
     title: '搜索'
+  # - comment: 
+  #   url: 'comment'
+  #   title: '评论'
+  #   isComment: true
+  # - board: 
+  #   url: 'board'
+  #   title: '留言板'
+  #   isBoard: true
 
 # algolia:
 #   appId: ""
 #   apiKey: ""
 #   indexName: ""
 
-staticman: 
-recent_comment: 5
+staticman: zongren/comment/
+comment_history: false
+comment_enable: false
+recent_comment: 0
+comment:
+  keyName: "namev2"
+  keyMessage: "messagev2"
+
+editing: true
 
 leancloud:
-  enable: true
-  appId: 
-  appKey: 
+  enable: false
+  appId: KCbjU78Bv9JrDEJvGe5WQave-gzGzoHsz
+  appKey: INYamD5sBr0DE5oYeoHljAf9
 
-font_name: 
+# font_name: "SentyCreamPuff"
+
+windows_tile:
+  enabled: true
+  # tile_color: "#000"
+  feed: true
+
+android_icon:
+  enabled: true
+
+apple_icon:
+  enabled: true
+  status_bar: black ## black or white

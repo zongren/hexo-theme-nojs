@@ -57,27 +57,35 @@
   <% } %>
   <% } %>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="/builds/zongren/zongren.gitlab.io/public/css/style.css">
-  <meta name="google-site-verification" content="ATaPEem898iBCQfmLF1GcKN72He8nR47_bqzhlwqsa0" />
-  <!-- Traditional icon -- >
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/images/icon-16x16.png" type="image/png" sizes="48x48">
   <link rel="icon" href="/images/icon-32x32.png" type="image/png" sizes="48x48">
-  <!-- Windows tile -->
-  <meta name="application-name" content="宗仁的博客"/>
+  <% if(typeof theme.windows_tile != "undefined" && theme.windows_tile.enabled){ %>
+  <meta name="application-name" content="<%= config.title %>"/>
   <meta name="msapplication-square70x70logo" content="/images/small.jpg"/>
   <meta name="msapplication-square150x150logo" content="/images/medium.jpg"/>
   <meta name="msapplication-wide310x150logo" content="/images/wide.jpg"/>
   <meta name="msapplication-square310x310logo" content="/images/large.jpg"/>
-  <meta name="msapplication-TileColor" content="#000"/>
-  <meta name="msapplication-notification" content="frequency=30;polling-uri=http://notifications.buildmypinnedsite.com/?feed=https://zongren.me/atom.xml&amp;id=1;polling-uri2=http://notifications.buildmypinnedsite.com/?feed=https://zongren.me/atom.xml&amp;id=2;polling-uri3=http://notifications.buildmypinnedsite.com/?feed=https://zongren.me/atom.xml&amp;id=3;polling-uri4=http://notifications.buildmypinnedsite.com/?feed=https://zongren.me/atom.xml&amp;id=4;polling-uri5=http://notifications.buildmypinnedsite.com/?feed=https://zongren.me/atom.xml&amp;id=5; cycle=1"/>
-  <!-- Android screen icon -->
+  <meta name="msapplication-TileImage" content="/images/large.jpg">
+  <% if(typeof theme.windows_tile.tile_color != "undefined"){ %>
+  <meta name="msapplication-TileColor" content="<%= theme.windows_tile.tile_color %>"/>
+  <% } %>
+  <% if(typeof theme.windows_tile.feed != "undefined" && theme.windows_tile.feed){ %>
+  <meta name="msapplication-notification" content="frequency=30;polling-uri=<%= config.url %>/<%= config.tile.path %>"/>
+  <% } %>
+  <% } %>
+  <% if(typeof theme.android_icon != "undefined" && theme.android_icon.enabled){ %>
   <link rel="manifest" href="manifest.json">
-  <!-- Apple touch icon -->
-  <meta name="apple-mobile-web-app-title" content="宗仁的博客">
+  <% } %>
+  <% if(typeof theme.apple_icon != "undefined" && theme.apple_icon.enabled){ %>
+  <meta name="apple-mobile-web-app-title" content="<%= config.title %>">
   <link rel="apple-touch-icon" href="/images/icon-120x120.png">
   <link rel="apple-touch-icon" sizes="152x152" href="/images/icon-152x152.png">
   <link rel="apple-touch-icon" sizes="167x167" href="/images/icon-167x167.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/icon-180x180.png">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <% if(typeof theme.apple_icon.status_bar != "undefined"){ %>
+  <meta name="apple-mobile-web-app-status-bar-style" content="<%= theme.apple_icon.status_bar %>">
+  <% } %>
+  <% } %>
 </head>

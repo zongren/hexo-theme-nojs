@@ -5,9 +5,9 @@
       </span>
       <button id="searchButton" class="search-form__button" onclick="return searchTool.submitSearchForm();return false;">搜索</button>
   </form>
-  <div class="power-by"><img class="power-by__image" src="/images/search-by-algolia.svg" alt="search-powered-by"/></div>
-  <div class="content__list" id="searchResult">
-  </div>
+    <div class="power-by"><img class="power-by__image" src="/images/search-by-algolia.svg" alt="search-powered-by"/></div>
+<ul class="comment__list" id="searchResult">
+  </ul>
 </section>
 <div id="pagination" class="pagination" style="display:none">
     <span>
@@ -28,18 +28,57 @@ var searchTool = (function(){
         showEmptyView("您的浏览器不支持搜索");
     }
 
-    function createLink(title,link,dateString){
-        var titleLinkNode = document.createElement('a');
-        titleLinkNode.className = 'article-header__link';
-        titleLinkNode.href = link;
-        titleLinkNode.innerHTML = title;
-        var articleNode = document.createElement('div');
-        articleNode.className = 'article-header';
-        articleNode.appendChild(titleLinkNode);
-        return articleNode;
+    function createLink(objectID,name,message,path,date,url){
+        if(arguments.length === 1 && typeof arguments[0] === "object"){
+            name = objectID["<%- theme.comment.keyName %>"];
+            message = objectID["<%- theme.comment.keyMessage %>"];
+            path = objectID["path"];
+            date = objectID["date"];
+            url = objectID["url"];
+            objectID = objectID["objectID"];
+        }
+        date = date.substring(0,10);
+
+        var liEl = document.createElement('li');
+        liEl.className = "comment__list-item";
+        var boxEl = document.createElement('div');
+        boxEl.className = "comment__box";
+        var headerEl = document.createElement('div');
+        headerEl.className = "comment__header";
+        var nameEl = document.createElement('span');
+        nameEl.className = "comment__author-name";
+        nameEl.innerHTML = name;
+        var dateEl = document.createElement('span');
+        dateEl.className = "comment__submit-date";
+        dateEl.innerHTML = date;
+        headerEl.appendChild(nameEl);
+        headerEl.appendChild(dateEl);
+        var contentEl = document.createElement('div');
+        contentEl.className = "comment__content";
+        contentEl.innerHTML = message;
+        var linkBoxEl = document.createElement('div');
+        linkBoxEl.className = "comment_link";
+        var commentSpanEl = document.createElement('span');
+        var commentLinkEl = document.createElement('a');
+        commentLinkEl.innerHTML = "查看评论";
+        commentLinkEl.href = "/" + path + "#comment-item-" + objectID;
+        commentSpanEl.appendChild(commentLinkEl);
+        var postSpanEl = document.createElement('span');
+        var postLinkEl = document.createElement('a');
+        postLinkEl.href = "/" + path;
+        postLinkEl.innerHTML = "查看文章";
+        postSpanEl.appendChild(postLinkEl);
+        linkBoxEl.appendChild(commentSpanEl);
+        linkBoxEl.appendChild(postSpanEl);
+        boxEl.appendChild(headerEl);
+        boxEl.appendChild(contentEl);
+        boxEl.appendChild(linkBoxEl);
+        liEl.appendChild(boxEl);
+
+        return liEl;
     }
 
-    var url = window.location.protocol+"//<%- theme.algolia.appId %>-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=<%- theme.algolia.appId %>&x-algolia-api-key=<%- theme.algolia.apiKey %>";
+    var url = window.location.protocol+"//<%- theme.algolia_comment.appId %>-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=<%- theme.algolia_comment.appId %>&x-algolia-api-key=<%- theme.algolia_comment.apiKey %>";
     var pagination = document.getElementById('pagination');
     var previousPage = document.getElementById('previousPage');
     var nextPage = document.getElementById('nextPage');
@@ -69,7 +108,7 @@ var searchTool = (function(){
 
     function search(){
         var query = searchForm.query.value;
-        var params = "{\"requests\":[{\"indexName\":\"<%- theme.algolia.indexName %>\",\"params\":\"query="+query+"&hitsPerPage="+hitsPerPage+"&page="+page+"\"}]}";
+        var params = "{\"requests\":[{\"indexName\":\"<%- theme.algolia_comment.indexName %>\",\"params\":\"query="+query+"&hitsPerPage="+hitsPerPage+"&page="+page+"\"}]}";
 
         xmlHttpRequest.open("POST",url,true);
         xmlHttpRequest.onreadystatechange=function(){
@@ -97,7 +136,7 @@ var searchTool = (function(){
         var nbHits = result.nbHits;
         var nbPages = result.nbPages;
         if(hits.length <= 0){
-            showEmptyView("找不到任何文章");
+            showEmptyView("找不到任何评论");
             return;
         }
         if(nbPages > 1){
@@ -122,7 +161,7 @@ var searchTool = (function(){
         container.innerHTML = "";
         for(i in hits){
             var post = hits[i];
-            var link = createLink(post.title,baseUrl + post.path,post.date);
+            var link = createLink(post);
             container.appendChild(link);
         }
 
